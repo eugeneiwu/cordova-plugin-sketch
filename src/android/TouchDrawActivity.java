@@ -60,10 +60,14 @@ public class TouchDrawActivity extends Activity {
     private int a, r, g, b; //Decoded ARGB color values for the background and erasing
 
     // Labels and values for stroke colour and width selection buttons
-    private static final String[] STROKE_COLOUR_LABELS = {"RED", "BLUE", "GREEN", "BLACK"};
-    private static final int[] STROKE_COLOUR_VALUES = {Color.RED, Color.BLUE, Color.GREEN, Color.BLACK};
-    private static final String[] STROKE_WIDTH_LABELS = {"0.5x", "1x", "2x", "8x"};
-    private static final Integer[] STROKE_WIDTH_VALUES = {2, 4, 8, 32};
+    //private static final String[] STROKE_COLOUR_LABELS = {"RED", "BLUE", "GREEN", "BLACK"};
+    //private static final int[] STROKE_COLOUR_VALUES = {Color.RED, Color.BLUE, Color.GREEN, Color.BLACK};
+
+    private static final String[] STROKE_COLOUR_LABELS = {"Schwarz", "Blau", "Rot", "Magenta", "Gelb", "Cyan", "Grau", "Dunkelgrau", "Hellgrau", "Radiergummi"};
+    private static final int[] STROKE_COLOUR_VALUES = {Color.BLACK, Color.BLUE, Color.RED, Color.MAGENTA, Color.YELLOW, Color.CYAN, Color.GRAY, Color.DKGRAY, Color.LTGRAY, Color.WHITE};
+
+    private static final String[] STROKE_WIDTH_LABELS = {"0.5x", "1x", "2x", "4x", "8x", "12x", "16x"};
+    private static final Integer[] STROKE_WIDTH_VALUES = {2, 4, 8, 16, 32, 48, 64};
 
     public enum BackgroundImageType {
         DATA_URL,
@@ -134,7 +138,7 @@ public class TouchDrawActivity extends Activity {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
-        mPaint.setColor(Color.BLUE);
+        mPaint.setColor(Color.BLACK);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -145,7 +149,7 @@ public class TouchDrawActivity extends Activity {
         LinearLayout buttonBar = new LinearLayout(this);
 
         Button doneButton = new Button(this);
-        doneButton.setText("Done");
+        doneButton.setText("FERTIG");
         doneButton.setBackgroundColor(Color.GREEN);
         doneButton.setLayoutParams(new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30));
@@ -157,8 +161,8 @@ public class TouchDrawActivity extends Activity {
         });
 
         Button eraseButton = new Button(this);
-        eraseButton.setText("Erase");
-        eraseButton.setBackgroundColor(Color.GRAY);
+        eraseButton.setText("Löschen");
+        eraseButton.setBackgroundColor(Color.RED);
         eraseButton.setLayoutParams(new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30));
         eraseButton.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +173,7 @@ public class TouchDrawActivity extends Activity {
         });
 
         Button cancelButton = new Button(this);
-        cancelButton.setText("Cancel");
+        cancelButton.setText("Abbrechen");
         cancelButton.setBackgroundColor(Color.RED);
         cancelButton.setLayoutParams(new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30));
@@ -198,7 +202,7 @@ public class TouchDrawActivity extends Activity {
     }
 
     public Spinner createColourSpinner() {
-        final String strokeColourLabelPrefix = "COLOUR: ";
+        final String strokeColourLabelPrefix = "Textfarbe: ";
         Spinner spinner = new Spinner(this);
 
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this,
@@ -207,7 +211,7 @@ public class TouchDrawActivity extends Activity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView v = (TextView) super.getView(position, convertView, parent);
 
-                v.setText(strokeColourLabelPrefix + "BLUE");
+                v.setText(strokeColourLabelPrefix + "BLACK");
                 return v;
             }
 
@@ -227,7 +231,7 @@ public class TouchDrawActivity extends Activity {
                 if (mPaint != null && position >= 0 && position < STROKE_COLOUR_VALUES.length) {
                     mPaint.setColor(STROKE_COLOUR_VALUES[position]);
 
-                    adapterView.setBackgroundColor(STROKE_COLOUR_VALUES[position]);
+                    //adapterView.setBackgroundColor(STROKE_COLOUR_VALUES[position]);
                     ((TextView) view).setText(strokeColourLabelPrefix + STROKE_COLOUR_LABELS[position]);
                 }
             }
@@ -236,18 +240,18 @@ public class TouchDrawActivity extends Activity {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
-        spinner.setBackgroundColor(Color.BLUE);
+        spinner.setBackgroundColor(Color.LTGRAY);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30);
         spinner.setLayoutParams(layoutParams);
-        spinner.setSelection(Arrays.asList(STROKE_COLOUR_LABELS).indexOf("BLUE"));
+        spinner.setSelection(Arrays.asList(STROKE_COLOUR_LABELS).indexOf("Schwarz"));
 
         return spinner;
     }
 
     public Spinner createWidthSpinner() {
-        final String strokeWidthLabelPrefix = "WIDTH: ";
+        final String strokeWidthLabelPrefix = "Strichstärke: ";
         Spinner spinner = new Spinner(this);
 
         final ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this,
@@ -287,6 +291,7 @@ public class TouchDrawActivity extends Activity {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+        spinner.setBackgroundColor(Color.LTGRAY);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30);
