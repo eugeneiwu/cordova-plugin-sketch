@@ -27,11 +27,11 @@ Displays a drawable pad based upon the supplied options, then allow user to draw
 
 NEW
 
-- showStrokeWidthSelect - 1 | 0
-- showColorSelect - 1 | 0
-- setStrokeWidth - Any Int, Sytem can provice from 1 - 24
-- toolbarBgColor - HEX like #FFFFFF (no short allowed like #FFF)
-- toolbarTextColor - HEX like #FA2000 (no short allowed like #FFF)
+- showStrokeWidthSelect (optional)
+- showColorSelect (optional)
+- setStrokeWidth (optional)
+- toolbarBgColor (optional)
+- toolbarTextColor (optional)
 
 The destinationType is the return image type, the available options are: DATA_URL, FILE_URI. If DestinationType is DATA_URL the plugin will return a string. If the DestinationType is FILE_URI, the plugin will return a file URI. The default is DATA_URL.
 
@@ -41,6 +41,17 @@ The inputType describes how to use the data provided in inputData. If you provid
 
 The inputData is a string or file URI of the background picture, depending on inputType.
 
+showStrokeWidthSelect 0 (= do not show) or 1 (= show), defaults to 1
+
+showColorSelect 0 (= do not show) or 1 (= show), defaults to 1
+
+setStrokeWidth 1 - 24 (theoretically even higher possible, but system only display 1 - 24), defaults to 1
+
+toolbarBgColor Color of the Toolbars (top, bottom), Hex Color like #FA2000, no short like #FFF allowed, defaults to #000000
+
+toolbarBgColor Color of the Toolbars (top, bottom), Hex Color like #FFFFFF, no short like #FFF allowed, defaults to #FFFFFF
+
+
 When the user presses "done", returns the image of the user sketched as an Data URI or file URI depending on input DestinationType.
 
 If the user presses "cancel", the result is `null`.
@@ -49,7 +60,7 @@ If the user presses "cancel", the result is `null`.
 
 - Android 4.0 +
 - iOS 8.0 +
-- <strike>Windows 8.1 +</strike> only original functions from blinkmobile!)
+- <strike>Windows 8.1 +</strike> (only original functions from blinkmobile!)
 
 ## Example
 
