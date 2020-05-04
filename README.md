@@ -5,7 +5,7 @@ This plugin defines a navigator.Sketch object, which supplies an interface to la
 ## Installation
 
 ```sh
-cordova plugin add https://github.com/blinkmobile/cordova-plugin-sketch.git
+cordova plugin add https://github.com/bendspoons/cordova-plugin-sketch.git
 ```
 
 ## Sketch.getSketch
@@ -25,6 +25,14 @@ Displays a drawable pad based upon the supplied options, then allow user to draw
 - inputType (optional)
 - inputData (optional)
 
+NEW
+
+- showStrokeWidthSelect - 1 | 0
+- showColorSelect - 1 | 0
+- setStrokeWidth - Any Int, Sytem can provice from 1 - 24
+- toolbarBgColor - HEX like #FFFFFF (no short allowed like #FFF)
+- toolbarTextColor - HEX like #FA2000 (no short allowed like #FFF)
+
 The destinationType is the return image type, the available options are: DATA_URL, FILE_URI. If DestinationType is DATA_URL the plugin will return a string. If the DestinationType is FILE_URI, the plugin will return a file URI. The default is DATA_URL.
 
 The EncodingType is the return image encode type, the available options are: JPEG, PNG. The plugin will encode the return image based on EncodingType. If you didn't define EncodingType, the plugin will return a PNG format image.
@@ -41,7 +49,7 @@ If the user presses "cancel", the result is `null`.
 
 - Android 4.0 +
 - iOS 8.0 +
-- Windows 8.1 +
+- <strike>Windows 8.1 +</strike> only original functions from blinkmobile!)
 
 ## Example
 
