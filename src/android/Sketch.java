@@ -327,6 +327,10 @@ public class Sketch extends CordovaPlugin {
                 touchDrawIntent.putExtra("toolbarBgColor", Sketch.this.toolbarBgColor);
                 touchDrawIntent.putExtra("toolbarTextColor", Sketch.this.toolbarTextColor);
 
+                if(Sketch.this.textValues != "none") {
+                    touchDrawIntent.putExtra("textValues", Sketch.this.textValues);
+                }
+
                 touchDrawIntent.putExtra(TouchDrawActivity.BACKGROUND_IMAGE_URL, inputData);
                 Sketch.this.cordova.getActivity().runOnUiThread(new Runnable() {
                     @Override
