@@ -1,4 +1,4 @@
-package au.com.blinkmobile.cordova.sketch;
+package com.bendspoons.cordova.sketch;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -42,14 +42,16 @@ public class Sketch extends CordovaPlugin {
     private String inputData;
     private CallbackContext callbackContext;
 
-    private String showColorSelect;
-    private String showStrokeWidthSelect;
-    private String setStrokeWidth;
-    private String toolbarBgColor;
-    private String toolbarTextColor;
+    private Integer showColorSelect = 1;
+    private Integer showStrokeWidthSelect = 1;
+    private Integer setStrokeWidth = 1;
+    private String toolbarBgColor = "#f5f6f6";
+    private String toolbarTextColor = "#007aff";
+    private String textValues;
 
     @Override
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
+        LOG.e(TAG, "Set showColorSelect with = " + args);
         if (!action.equals("getSketch")) {
             callbackContext.sendPluginResult(
                     new PluginResult(Status.INVALID_ACTION, "Unsupported action: " + action));
@@ -58,63 +60,83 @@ public class Sketch extends CordovaPlugin {
 
         try {
             JSONObject options = args.getJSONObject(0);
+            LOG.e(TAG, "options = " + options);
+
+            if (options.has("text")) {
+                JSONObject tmpText = options.getJSONObject("text");
+                this.textValues = tmpText.toString();
+                LOG.e(TAG, "Set tmpText with = " + this.textValues);
+            } else {
+                this.textValues = "none";
+                LOG.e(TAG, "Set showColorSelect DEFAULT = true");
+            }
 
             if (options.has("showColorSelect")) {
-                Integer tmpShowColorSelect = options.getInt("showColorSelect");
-                this.showColorSelect = tmpShowColorSelect.toString();
+                this.showColorSelect = options.getInt("showColorSelect");
                 LOG.e(TAG, "Set showColorSelect with = " + this.showColorSelect);
             } else {
-                this.showColorSelect = "1";
+                this.showColorSelect = 1;
                 LOG.e(TAG, "Set showColorSelect DEFAULT = true");
             }
 
             if (options.has("showStrokeWidthSelect")) {
-                this.showStrokeWidthSelect = options.getString("");
-                Integer tmpShowStrokeWidthSelect = options.getInt("showStrokeWidthSelect");
-                this.showStrokeWidthSelect = tmpShowStrokeWidthSelect.toString();
+                this.showStrokeWidthSelect = options.getInt("showStrokeWidthSelect");
                 LOG.e(TAG, "Set showStrokeWidthSelect with = " + this.showStrokeWidthSelect);
             } else {
-                this.showStrokeWidthSelect = "1";
+                this.showStrokeWidthSelect = 1;
                 LOG.e(TAG, "Set showStrokeWidthSelect DEFAULT = true");
             }
 
             if (options.has("setStrokeWidth")) {
-                if (options.getInt("setStrokeWidth") > 0) {
-                    this.setStrokeWidth = options.getString("setStrokeWidth");
-                    LOG.e(TAG, "Set setStrokeWidth with = " + ""+this.setStrokeWidth);
-                } else {
-                    this.setStrokeWidth = "1";
-                    LOG.e(TAG, "Set setStrokeWidth ERROR VALUE DEFAULT = 1");
+                Boolean androidOverride = false;
+                if (options.has("setAndroidStrokeWidth")) {
+                    if (options.getInt("setAndroidStrokeWidth") > 0) {
+                        androidOverride = true;
+                        this.setStrokeWidth = options.getInt("setAndroidStrokeWidth");
+                        LOG.e(TAG, "Set setStrokeWidth setAndroidStrokeWidth with = " + ""+this.setStrokeWidth);
+                    }
+                }
+
+                if(!androidOverride) {
+                    if (options.getInt("setStrokeWidth") > 0) {
+                        this.setStrokeWidth = options.getInt("setStrokeWidth");
+                        LOG.e(TAG, "Set setStrokeWidth with = " + ""+this.setStrokeWidth);
+                    } else {
+                        this.setStrokeWidth = 1;
+                        LOG.e(TAG, "Set setStrokeWidth ERROR VALUE DEFAULT = 1");
+                    }
                 }
             } else {
-                this.setStrokeWidth = "1";
+                this.setStrokeWidth = 1;
                 LOG.e(TAG, "Set setStrokeWidth DEFAULT = 1");
             }
+
+
 
             if (options.has("toolbarBgColor")) {
                 if (options.getString("toolbarBgColor").length() == 7) {
                     this.toolbarBgColor = options.getString("toolbarBgColor");
-                    LOG.e(TAG, "Set toolbarBgColor with = " + ""+this.toolbarBgColor);
+                    LOG.e(TAG, "Set toolbarBgColor with = " + this.toolbarBgColor);
                 } else {
-                    this.toolbarBgColor = "#000000";
-                    LOG.e(TAG, "Set toolbarBgColor ERROR VALUE DEFAULT = #000000");
+                    //this.toolbarBgColor = "#f5f6f6";
+                    LOG.e(TAG, "Set toolbarBgColor ERROR VALUE DEFAULT = " + this.toolbarBgColor);
                 }
             } else {
-                this.toolbarBgColor = "#000000";
-                LOG.e(TAG, "Set toolbarBgColor DEFAULT = #000000");
+                //this.toolbarBgColor = "#f5f6f6";
+                LOG.e(TAG, "Set toolbarBgColor DEFAULT = " + this.toolbarBgColor);
             }
 
             if (options.has("toolbarTextColor")) {
                 if (options.getString("toolbarTextColor").length() == 7) {
                     this.toolbarTextColor = options.getString("toolbarTextColor");
-                    LOG.e(TAG, "Set toolbarTextColor with = " + ""+toolbarTextColor);
+                    LOG.e(TAG, "Set toolbarTextColor with = " + this.toolbarTextColor);
                 } else {
-                    this.toolbarTextColor = "#FFFFFF";
-                    LOG.e(TAG, "Set toolbarTextColor ERROR VALUE DEFAULT = #FFFFFF");
+                    //this.toolbarTextColor = "#007aff";
+                    LOG.e(TAG, "Set toolbarTextColor ERROR VALUE DEFAULT = " + this.toolbarTextColor);
                 }
             } else {
-                this.toolbarTextColor = "#FFFFFF";
-                LOG.e(TAG, "Set toolbarTextColor DEFAULT = #FFFFFF");
+                //this.toolbarTextColor = "#007aff";
+                LOG.e(TAG, "Set toolbarTextColor DEFAULT = " + this.toolbarTextColor);
             }
 
             int opt = options.getInt("destinationType");
@@ -179,11 +201,16 @@ public class Sketch extends CordovaPlugin {
                         TouchDrawActivity.BackgroundImageType.COLOUR.ordinal());
                 touchDrawIntent.putExtra(TouchDrawActivity.BACKGROUND_COLOUR, "#FFFFFF");
 
-                touchDrawIntent.putExtra(TouchDrawActivity.showColorSelect, Sketch.this.showColorSelect);
-                touchDrawIntent.putExtra(TouchDrawActivity.showStrokeWidthSelect, Sketch.this.showStrokeWidthSelect);
+                touchDrawIntent.putExtra("showColorSelect", Sketch.this.showColorSelect.toString());
+                touchDrawIntent.putExtra("showStrokeWidthSelect", Sketch.this.showStrokeWidthSelect.toString());
+                //touchDrawIntent.putExtra("setStrokeWidth", Sketch.this.setStrokeWidth.toString());
 
-                touchDrawIntent.putExtra(TouchDrawActivity.toolbarBgColor, Sketch.this.toolbarBgColor);
-                touchDrawIntent.putExtra(TouchDrawActivity.toolbarTextColor, Sketch.this.toolbarTextColor);
+                touchDrawIntent.putExtra("toolbarBgColor", Sketch.this.toolbarBgColor);
+                touchDrawIntent.putExtra("toolbarTextColor", Sketch.this.toolbarTextColor);
+
+                if(Sketch.this.textValues != "none") {
+                    touchDrawIntent.putExtra("textValues", Sketch.this.textValues);
+                }
 
                 if (Sketch.this.encodingType == EncodingType.PNG) {
                     touchDrawIntent.putExtra(TouchDrawActivity.DRAWING_RESULT_ENCODING_TYPE,
@@ -293,11 +320,12 @@ public class Sketch extends CordovaPlugin {
                             Bitmap.CompressFormat.JPEG.ordinal());
                 }
 
-                touchDrawIntent.putExtra(TouchDrawActivity.showColorSelect, Sketch.this.showColorSelect);
-                touchDrawIntent.putExtra(TouchDrawActivity.showStrokeWidthSelect, Sketch.this.showStrokeWidthSelect);
+                touchDrawIntent.putExtra("showColorSelect", Sketch.this.showColorSelect.toString());
+                touchDrawIntent.putExtra("showStrokeWidthSelect", Sketch.this.showStrokeWidthSelect.toString());
+                touchDrawIntent.putExtra("setStrokeWidth", Sketch.this.setStrokeWidth.toString());
 
-                touchDrawIntent.putExtra(TouchDrawActivity.toolbarBgColor, Sketch.this.toolbarBgColor);
-                touchDrawIntent.putExtra(TouchDrawActivity.toolbarTextColor, Sketch.this.toolbarTextColor);
+                touchDrawIntent.putExtra("toolbarBgColor", Sketch.this.toolbarBgColor);
+                touchDrawIntent.putExtra("toolbarTextColor", Sketch.this.toolbarTextColor);
 
                 touchDrawIntent.putExtra(TouchDrawActivity.BACKGROUND_IMAGE_URL, inputData);
                 Sketch.this.cordova.getActivity().runOnUiThread(new Runnable() {

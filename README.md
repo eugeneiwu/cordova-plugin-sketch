@@ -27,13 +27,12 @@ Displays a drawable pad based upon the supplied options, then allow user to draw
 
 NEW
 
-- showStrokeWidthSelect (optional, iOS only as of 04/05/2020)
-- showColorSelect (optional, iOS only as of 04/05/2020)
-- setStrokeWidth (optional, iOS only as of 04/05/2020)
-- toolbarBgColor (optional, iOS only as of 04/05/2020)
-- toolbarTextColor (optional, iOS only as of 04/05/2020)
-
-*For iOS 13 added the FULLSCREEN info for the ViewController, without, drawing on the canvas was impossoible due to the fact, that the Controller Modal didi move when attempting to draw.*
+- showStrokeWidthSelect (optional)
+- showColorSelect (optional)
+- setStrokeWidth (optional)
+- toolbarBgColor (optional)
+- toolbarTextColor (optional)
+- text (optional)
 
 The **destinationType** is the return image type, the available options are: DATA_URL, FILE_URI. If DestinationType is DATA_URL the plugin will return a string. If the DestinationType is FILE_URI, the plugin will return a file URI. The default is DATA_URL.
 
@@ -47,16 +46,29 @@ The **inputData** is a string or file URI of the background picture, depending o
 
 **showColorSelect** 0 (= do not show) or 1 (= show), defaults to 1
 
-**setStrokeWidth** 1 - 24 (theoretically even higher possible, but system only display 1 - 24), defaults to 1
+**setStrokeWidth** 1 - 24 (theoretically even higher possible, but system only display 1 - 24, but crashes on Android (to be fixed)), defaults to 1
 
-**toolbarBgColor** Color of the Toolbars (top, bottom), Hex Color like #FA2000, no short like #FFF allowed, defaults to #000000
+**toolbarBgColor** Color of the Toolbars (top, bottom), Hex Color like #FA2000, no shortcut like #FFF allowed, defaults to #f5f6f6
 
-**toolbarBgColor** Color of the Toolbars (top, bottom), Hex Color like #FFFFFF, no short like #FFF allowed, defaults to #FFFFFF
+**toolbarBgColor** Color of the Toolbars (top, bottom), Hex Color like #FFFFFF, no shortcut like #FFF allowed, defaults to #007aff
 
+**text** JSON Object, with
+backBtn     : '< zurück',
+clearBtn    : 'löschen',
+clearTitle  : 'Eintrag löschen?',
+clearText   : 'Den gesamten Inhalt jetzt zurücksetzen?',
+colorBtn    : 'Textfarbe',
+strokeBtn   : 'Strichstärke',
+saveBtn     : 'Speichern'
 
 When the user presses "done", returns the image of the user sketched as an Data URI or file URI depending on input DestinationType.
 
 If the user presses "cancel", the result is `null`.
+
+Further Improvements:
+
+- Confirm Dialog when trying to clear canvas
+- For iOS (13) added the FULLSCREEN info for the ViewController, without, drawing on the canvas was impossoible due to the fact, that the Controller Modal did move when attempting to draw.
 
 ## Supported Platforms
 
@@ -81,10 +93,24 @@ document.getElementById("cordova-plugin-sketch-open").addEventListener("click", 
 function getSketch(){
   var image = document.getElementById('myImage');
   navigator.sketch.getSketch(onSuccess, onFail, {
-    destinationType: navigator.sketch.DestinationType.DATA_URL,
-    encodingType: navigator.sketch.EncodingType.JPEG,
-    inputType : navigator.sketch.InputType.FILE_URI,
-    inputData : image.src
+    destinationType       : navigator.sketch.DestinationType.DATA_URL,
+    encodingType          : navigator.sketch.EncodingType.JPEG,
+    showColorSelect       : 1,
+    showStrokeWidthSelect : 1,
+    setStrokeWidth        : 8,
+    toolbarBgColor        : '#007BFF',
+    toolbarTextColor      : '#FFFFFF',
+    text                  : {
+      'backBtn'     : '< zurück',
+      'clearBtn'    : 'löschen',
+      'clearTitle'  : 'Eintrag löschen?',
+      'clearText'   : 'Den gesamten Inhalt jetzt zurücksetzen?',
+      'colorBtn'    : 'Textfarbe',
+      'strokeBtn'   : 'Strichstärke',
+      'saveBtn'     : 'Speichern'
+    }
+    inputType             : navigator.sketch.InputType.FILE_URI,
+    inputData             : ''
   });
 }
 

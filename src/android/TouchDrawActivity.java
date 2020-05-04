@@ -1,4 +1,4 @@
-package au.com.blinkmobile.cordova.sketch;
+package com.bendspoons.cordova.sketch;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Display;
@@ -27,11 +28,20 @@ import android.util.Base64;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.util.DisplayMetrics;
+import android.graphics.drawable.GradientDrawable;
+
+import org.apache.cordova.LOG;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -48,11 +58,22 @@ public class TouchDrawActivity extends Activity {
     public static final String DRAWING_RESULT_SCALE = "drawing_scale";
     public static final String DRAWING_RESULT_ENCODING_TYPE = "drawing_encoding_type";
 
-    public static final String showColorSelect = 1;
-    public static final String showStrokeWidthSelect = 1;
+    public int showColorSelect = 1;
+    public int showStrokeWidthSelect = 1;
+    // see mStrokeWidth Width public static final Integer
+    // public int setStrokeWidth = 1;
 
-    public static final String toolbarBgColor = "#000000";
-    public static final String toolbarTextColor = "#ffffff";
+    public String toolbarBgColor;
+    public String toolbarTextColor;
+
+    public JSONObject textValues;
+    public String backBtn = "Back";
+    public String clearBtn = "Clear";
+    public String clearTitle = "Clear canvas";
+    public String clearText = "Clear complete canvas?";
+    public String colorBtn = "Stroke color";
+    public String strokeBtn = "Stroke width";
+    public String saveBtn = "Save";
 
     private Paint mPaint;
     private int mStrokeWidth = 4;
@@ -72,8 +93,8 @@ public class TouchDrawActivity extends Activity {
     private static final String[] STROKE_COLOUR_LABELS = {"Schwarz", "Blau", "Rot", "Magenta", "Gelb", "Cyan", "Grau", "Dunkelgrau", "Hellgrau", "Radiergummi"};
     private static final int[] STROKE_COLOUR_VALUES = {Color.BLACK, Color.BLUE, Color.RED, Color.MAGENTA, Color.YELLOW, Color.CYAN, Color.GRAY, Color.DKGRAY, Color.LTGRAY, Color.WHITE};
 
-    private static final String[] STROKE_WIDTH_LABELS = {"0.5x", "1x", "2x", "4x", "8x", "12x", "16x"};
-    private static final Integer[] STROKE_WIDTH_VALUES = {2, 4, 8, 16, 32, 48, 64};
+    private static final String[] STROKE_WIDTH_LABELS = {"1x", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x", "10x", "11x", "12x", "13x", "14x", "15x", "16x", "17x", "18x", "19x", "20x", "21x", "22x", "23x", "24x"};
+    private static final Integer[] STROKE_WIDTH_VALUES = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24};
 
     public enum BackgroundImageType {
         DATA_URL,
@@ -95,6 +116,42 @@ public class TouchDrawActivity extends Activity {
             mScale = intentExtras.getInt(DRAWING_RESULT_SCALE, mScale);
             mEncodingType = Bitmap.CompressFormat.values()[
                     intentExtras.getInt(DRAWING_RESULT_ENCODING_TYPE, mEncodingType.ordinal())];
+
+            showColorSelect = Integer.parseInt(intentExtras.getString("showColorSelect"));
+            showStrokeWidthSelect = Integer.parseInt(intentExtras.getString("showStrokeWidthSelect"));
+            //mStrokeWidth = Integer.parseInt(intentExtras.getString("setStrokeWidth"));
+
+            toolbarBgColor = intentExtras.getString("toolbarBgColor");
+            toolbarTextColor = intentExtras.getString("toolbarTextColor");
+
+            String tmpTextValues = intentExtras.getString("textValues");
+            LOG.e("APP", "=> " + tmpTextValues);
+
+            if(tmpTextValues != null) {
+                try {
+                    textValues = new JSONObject(tmpTextValues);
+                } catch(JSONException e) {
+                    LOG.e("APP", "ERROR PARSING => " + tmpTextValues);
+                }
+
+                try {
+                    try {
+                        backBtn = new String(textValues.getString("backBtn").getBytes("ISO-8859-1"), "UTF-8");
+                        clearBtn = new String(textValues.getString("clearBtn").getBytes("ISO-8859-1"), "UTF-8");
+                        clearTitle = new String(textValues.getString("clearTitle").getBytes("ISO-8859-1"), "UTF-8");
+                        clearText = new String(textValues.getString("clearText").getBytes("ISO-8859-1"), "UTF-8");
+                        colorBtn = new String(textValues.getString("colorBtn").getBytes("ISO-8859-1"), "UTF-8");
+                        strokeBtn = new String(textValues.getString("strokeBtn").getBytes("ISO-8859-1"), "UTF-8");
+                        saveBtn = new String(textValues.getString("saveBtn").getBytes("ISO-8859-1"), "UTF-8");
+                    } catch(UnsupportedEncodingException e2) {
+                        LOG.e("APP", e2.getMessage());
+                        e2.printStackTrace();
+                    }
+                } catch(JSONException e) {
+                    LOG.e("APP", e.getMessage());
+                    e.printStackTrace();
+                }
+            }
         }
 
         if (mBackgroundImageType != BackgroundImageType.COLOUR && mBackgroundImageUrl.isEmpty()) {
@@ -154,33 +211,12 @@ public class TouchDrawActivity extends Activity {
     public LinearLayout createButtonBar() {
         LinearLayout buttonBar = new LinearLayout(this);
 
-        Button doneButton = new Button(this);
-        doneButton.setText("FcERTIG");
-        doneButton.setBackgroundColor(Color.GREEN);
-        doneButton.setLayoutParams(new LinearLayout.LayoutParams(
-                0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30));
-        doneButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                finishDrawing();
-            }
-        });
-
-        Button eraseButton = new Button(this);
-        eraseButton.setText("Löxschen");
-        eraseButton.setBackgroundColor(Color.RED);
-        eraseButton.setLayoutParams(new LinearLayout.LayoutParams(
-                0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30));
-        eraseButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                eraseDrawing();
-            }
-        });
-
         Button cancelButton = new Button(this);
-        cancelButton.setText("Asbbrechen");
-        cancelButton.setBackgroundColor(Color.RED);
+        //cancelButton.setText("< zurück");
+        cancelButton.setText(backBtn);
+        cancelButton.setTypeface(Typeface.SANS_SERIF);
+        cancelButton.setBackgroundColor(Color.parseColor(toolbarBgColor));
+        cancelButton.setTextColor(Color.parseColor(toolbarTextColor));
         cancelButton.setLayoutParams(new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30));
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -191,9 +227,24 @@ public class TouchDrawActivity extends Activity {
             }
         });
 
-        buttonBar.addView(doneButton);
-        buttonBar.addView(eraseButton);
+        Button eraseButton = new Button(this);
+        //eraseButton.setText("Löschen");
+        eraseButton.setText(clearBtn);
+        eraseButton.setTypeface(Typeface.SANS_SERIF);
+        eraseButton.setBackgroundColor(Color.parseColor(toolbarBgColor));
+        eraseButton.setTextColor(Color.parseColor(toolbarTextColor));
+        eraseButton.setLayoutParams(new LinearLayout.LayoutParams(
+                0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30));
+        eraseButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                eraseDrawing();
+            }
+        });
+
         buttonBar.addView(cancelButton);
+
+        buttonBar.addView(eraseButton);
 
         return buttonBar;
     }
@@ -201,19 +252,37 @@ public class TouchDrawActivity extends Activity {
     public LinearLayout createToolBar() {
         LinearLayout toolBar = new LinearLayout(this);
 
-        if(showColorSelect == "1") {
+        Button doneButton = new Button(this);
+        //doneButton.setText("Speichern");
+        doneButton.setText(saveBtn);
+        doneButton.setTypeface(Typeface.SANS_SERIF);
+        doneButton.setBackgroundColor(Color.parseColor(toolbarBgColor));
+        doneButton.setTextColor(Color.parseColor(toolbarTextColor));
+        doneButton.setLayoutParams(new LinearLayout.LayoutParams(
+                0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30));
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                finishDrawing();
+            }
+        });
+
+        if(showColorSelect == 1) {
             toolBar.addView(createColourSpinner());
         }
 
-        if(showStrokeWidthSelect == "1") {
+        if(showStrokeWidthSelect == 1) {
             toolBar.addView(createWidthSpinner());
         }
+
+        toolBar.addView(doneButton);
 
         return toolBar;
     }
 
     public Spinner createColourSpinner() {
-        final String strokeColourLabelPrefix = "Textfarbe: ";
+        //final String strokeColourLabelPrefix = "Textfarbe";
+        final String strokeColourLabelPrefix = colorBtn;
         Spinner spinner = new Spinner(this);
 
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this,
@@ -225,7 +294,8 @@ public class TouchDrawActivity extends Activity {
 
                 v.setBackgroundColor(Color.parseColor(toolbarBgColor));
                 v.setTextColor(Color.parseColor(toolbarTextColor));
-                v.setText(strokeColourLabelPrefix + "BLACK");
+                v.setTypeface(Typeface.SANS_SERIF);
+                v.setText(strokeColourLabelPrefix);
                 return v;
             }
 
@@ -233,7 +303,25 @@ public class TouchDrawActivity extends Activity {
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 TextView v = (TextView) super.getDropDownView(position, convertView,parent);
 
-                v.setText(STROKE_COLOUR_LABELS[position]);
+                //v.setTypeface(Typeface.SANS_SERIF);
+                v.setBackgroundColor(STROKE_COLOUR_VALUES[position]);
+                //v.setTypeface(Typeface.SANS_SERIF);
+                v.setText(" ");
+
+                if(STROKE_COLOUR_VALUES[position] != mPaint.getColor()) {
+                    GradientDrawable drawable = new GradientDrawable();
+                    drawable.setShape(GradientDrawable.RECTANGLE);
+                    drawable.setStroke(20, Color.WHITE);
+                    drawable.setColor(STROKE_COLOUR_VALUES[position]);
+                    v.setBackground(drawable);
+                } else {
+                    GradientDrawable drawable = new GradientDrawable();
+                    drawable.setShape(GradientDrawable.RECTANGLE);
+                    drawable.setStroke(20, STROKE_COLOUR_VALUES[position]);
+                    drawable.setColor(STROKE_COLOUR_VALUES[position]);
+                    v.setBackground(drawable);
+                }
+                //v.setText(STROKE_COLOUR_LABELS[position]);
                 return v;
             }
         };
@@ -246,9 +334,10 @@ public class TouchDrawActivity extends Activity {
                     mPaint.setColor(STROKE_COLOUR_VALUES[position]);
 
                     //adapterView.setBackgroundColor(STROKE_COLOUR_VALUES[position]);
-                    v.setBackgroundColor(Color.parseColor(toolbarBgColor));
-                    v.setTextColor(Color.parseColor(toolbarTextColor));
-                    ((TextView) view).setText(strokeColourLabelPrefix + STROKE_COLOUR_LABELS[position]);
+                    ((TextView) view).setBackgroundColor(Color.parseColor(toolbarBgColor));
+                    ((TextView) view).setTextColor(Color.parseColor(toolbarTextColor));
+                    ((TextView) view).setTypeface(Typeface.SANS_SERIF);
+                    ((TextView) view).setText(strokeColourLabelPrefix);
                 }
             }
 
@@ -257,12 +346,15 @@ public class TouchDrawActivity extends Activity {
             }
         });
         spinner.setBackgroundColor(Color.parseColor(toolbarBgColor));
+        spinner.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
         //View v = spinner.getSelectedView();
         //((TextView)v).setTextColor(Color.parseColor(toolbarTextColor));
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.width = (int) (getScreenWidth(this) * 0.3);
+
+        //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30);
         spinner.setLayoutParams(layoutParams);
         spinner.setSelection(Arrays.asList(STROKE_COLOUR_LABELS).indexOf("Schwarz"));
 
@@ -270,7 +362,8 @@ public class TouchDrawActivity extends Activity {
     }
 
     public Spinner createWidthSpinner() {
-        final String strokeWidthLabelPrefix = "Strichstärke: ";
+        //final String strokeWidthLabelPrefix = "Strichstärke ";
+        final String strokeWidthLabelPrefix = strokeBtn;
         Spinner spinner = new Spinner(this);
 
         final ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this,
@@ -279,8 +372,12 @@ public class TouchDrawActivity extends Activity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView v = (TextView) super.getView(position, convertView, parent);
 
-                v.setText(strokeWidthLabelPrefix +
-                        STROKE_WIDTH_LABELS[Arrays.asList(STROKE_WIDTH_VALUES).indexOf(mStrokeWidth)]);
+                v.setBackgroundColor(Color.parseColor(toolbarBgColor));
+                v.setTextColor(Color.parseColor(toolbarTextColor));
+                v.setTypeface(Typeface.SANS_SERIF);
+                //v.setText(strokeWidthLabelPrefix + STROKE_WIDTH_LABELS[Arrays.asList(STROKE_WIDTH_VALUES).indexOf(mStrokeWidth)]);
+                v.setText(strokeWidthLabelPrefix + mStrokeWidth);
+                //v.setText(strokeWidthLabelPrefix);
                 return v;
             }
 
@@ -288,6 +385,7 @@ public class TouchDrawActivity extends Activity {
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 TextView v = (TextView) super.getDropDownView(position, convertView,parent);
 
+                v.setTypeface(Typeface.SANS_SERIF);
                 v.setText(STROKE_WIDTH_LABELS[position]);
                 return v;
             }
@@ -298,8 +396,13 @@ public class TouchDrawActivity extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 mStrokeWidth = STROKE_WIDTH_VALUES[position];
-                ((TextView) view).setText(strokeWidthLabelPrefix +
-                        STROKE_WIDTH_LABELS[Arrays.asList(STROKE_WIDTH_VALUES).indexOf(mStrokeWidth)]);
+
+                ((TextView) view).setBackgroundColor(Color.parseColor(toolbarBgColor));
+                ((TextView) view).setTextColor(Color.parseColor(toolbarTextColor));
+                ((TextView) view).setTypeface(Typeface.SANS_SERIF);
+                //((TextView) view).setText(strokeWidthLabelPrefix + STROKE_WIDTH_LABELS[Arrays.asList(STROKE_WIDTH_VALUES).indexOf(mStrokeWidth)]);
+                ((TextView) view).setText(strokeWidthLabelPrefix + mStrokeWidth);
+                //((TextView) view).setText(strokeWidthLabelPrefix);
 
                 if (mPaint != null) {
                     mPaint.setStrokeWidth(mStrokeWidth);
@@ -311,9 +414,13 @@ public class TouchDrawActivity extends Activity {
             }
         });
         spinner.setBackgroundColor(Color.parseColor(toolbarBgColor));
+        spinner.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.width = (int) (getScreenWidth(this) * 0.4);
+
+        //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30);
         spinner.setLayoutParams(layoutParams);
         spinner.setSelection(Arrays.asList(STROKE_WIDTH_LABELS).indexOf("1x"));
 
@@ -321,32 +428,47 @@ public class TouchDrawActivity extends Activity {
     }
 
     public void eraseDrawing() {
-        try{
-            switch (mBackgroundImageType) {
-                case COLOUR:
-                    mBitmap.eraseColor(Color.argb(a, r, g, b));
-                    break;
-                case FILE_URL:
-                    mBitmap = loadMutableBitmapFromFileURI(new URI(mBackgroundImageUrl));
-                    break;
-                case DATA_URL:
-                   mBitmap = loadMutableBitmapFromBase64DataUrl(mBackgroundImageUrl);
-                   break;
-                default:
-                    return;
-            }
-        } catch (URISyntaxException e) {
-            handleFileUriError(e);
-            return;
-        } catch (FileNotFoundException e) {
-            handleFileIOError(e);
-            return;
-        }
 
-        mBitmap = Bitmap.createScaledBitmap(mBitmap, mTdView.mCanvas.getWidth(),
-                mTdView.mCanvas.getHeight(), false);
-        mTdView.mCanvas = new Canvas(mBitmap);
-        mTdView.invalidate();
+        new AlertDialog.Builder(this)
+                //.setTitle("Eintrag löschen")
+                .setTitle(clearTitle)
+                //.setMessage("Den gesamten Inhalt jetzt zurücksetzen?")
+                .setMessage(clearText)
+
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        try{
+                            switch (mBackgroundImageType) {
+                                case COLOUR:
+                                    mBitmap.eraseColor(Color.argb(a, r, g, b));
+                                    break;
+                                case FILE_URL:
+                                    mBitmap = loadMutableBitmapFromFileURI(new URI(mBackgroundImageUrl));
+                                    break;
+                                case DATA_URL:
+                                    mBitmap = loadMutableBitmapFromBase64DataUrl(mBackgroundImageUrl);
+                                    break;
+                                default:
+                                    return;
+                            }
+                        } catch (URISyntaxException e) {
+                            handleFileUriError(e);
+                            return;
+                        } catch (FileNotFoundException e) {
+                            handleFileIOError(e);
+                            return;
+                        }
+
+                        mBitmap = Bitmap.createScaledBitmap(mBitmap, mTdView.mCanvas.getWidth(),
+                                mTdView.mCanvas.getHeight(), false);
+                        mTdView.mCanvas = new Canvas(mBitmap);
+                        mTdView.invalidate();
+                    }
+                })
+
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     public void cancelDrawing() {
@@ -614,4 +736,10 @@ public class TouchDrawActivity extends Activity {
         }
     }
     private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
+
+    public static int getScreenWidth(Context context) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.widthPixels;
+    }
 }
