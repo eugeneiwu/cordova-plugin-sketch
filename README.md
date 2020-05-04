@@ -27,29 +27,29 @@ Displays a drawable pad based upon the supplied options, then allow user to draw
 
 NEW
 
-- showStrokeWidthSelect (optional)
-- showColorSelect (optional)
-- setStrokeWidth (optional)
-- toolbarBgColor (optional)
-- toolbarTextColor (optional)
+- showStrokeWidthSelect (optional, iOS only as of 04/05/2020)
+- showColorSelect (optional, iOS only as of 04/05/2020)
+- setStrokeWidth (optional, iOS only as of 04/05/2020)
+- toolbarBgColor (optional, iOS only as of 04/05/2020)
+- toolbarTextColor (optional, iOS only as of 04/05/2020)
 
-The destinationType is the return image type, the available options are: DATA_URL, FILE_URI. If DestinationType is DATA_URL the plugin will return a string. If the DestinationType is FILE_URI, the plugin will return a file URI. The default is DATA_URL.
+The **destinationType** is the return image type, the available options are: DATA_URL, FILE_URI. If DestinationType is DATA_URL the plugin will return a string. If the DestinationType is FILE_URI, the plugin will return a file URI. The default is DATA_URL.
 
-The EncodingType is the return image encode type, the available options are: JPEG, PNG. The plugin will encode the return image based on EncodingType. If you didn't define EncodingType, the plugin will return a PNG format image.
+The **EncodingType** is the return image encode type, the available options are: JPEG, PNG. The plugin will encode the return image based on EncodingType. If you didn't define EncodingType, the plugin will return a PNG format image.
 
-The inputType describes how to use the data provided in inputData. If you provide a Data URI or file URI as background picture, user can make annotation on the picture, if you provide nothing, user can draw a picture on a blank background, e.g. a signature.
+The **inputType** describes how to use the data provided in inputData. If you provide a Data URI or file URI as background picture, user can make annotation on the picture, if you provide nothing, user can draw a picture on a blank background, e.g. a signature.
 
-The inputData is a string or file URI of the background picture, depending on inputType.
+The **inputData** is a string or file URI of the background picture, depending on inputType.
 
-showStrokeWidthSelect 0 (= do not show) or 1 (= show), defaults to 1
+**showStrokeWidthSelect** 0 (= do not show) or 1 (= show), defaults to 1
 
-showColorSelect 0 (= do not show) or 1 (= show), defaults to 1
+**showColorSelect** 0 (= do not show) or 1 (= show), defaults to 1
 
-setStrokeWidth 1 - 24 (theoretically even higher possible, but system only display 1 - 24), defaults to 1
+**setStrokeWidth** 1 - 24 (theoretically even higher possible, but system only display 1 - 24), defaults to 1
 
-toolbarBgColor Color of the Toolbars (top, bottom), Hex Color like #FA2000, no short like #FFF allowed, defaults to #000000
+**toolbarBgColor** Color of the Toolbars (top, bottom), Hex Color like #FA2000, no short like #FFF allowed, defaults to #000000
 
-toolbarBgColor Color of the Toolbars (top, bottom), Hex Color like #FFFFFF, no short like #FFF allowed, defaults to #FFFFFF
+**toolbarBgColor** Color of the Toolbars (top, bottom), Hex Color like #FFFFFF, no short like #FFF allowed, defaults to #FFFFFF
 
 
 When the user presses "done", returns the image of the user sketched as an Data URI or file URI depending on input DestinationType.
