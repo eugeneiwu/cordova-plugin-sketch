@@ -42,6 +42,12 @@ public class Sketch extends CordovaPlugin {
     private String inputData;
     private CallbackContext callbackContext;
 
+    private String showColorSelect;
+    private String showStrokeWidthSelect;
+    private String setStrokeWidth;
+    private String toolbarBgColor;
+    private String toolbarTextColor;
+
     @Override
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
         if (!action.equals("getSketch")) {
@@ -52,6 +58,64 @@ public class Sketch extends CordovaPlugin {
 
         try {
             JSONObject options = args.getJSONObject(0);
+
+            if (options.has("showColorSelect")) {
+                Integer tmpShowColorSelect = options.getInt("showColorSelect");
+                this.showColorSelect = tmpShowColorSelect.toString();
+                LOG.e(TAG, "Set showColorSelect with = " + this.showColorSelect);
+            } else {
+                this.showColorSelect = "1";
+                LOG.e(TAG, "Set showColorSelect DEFAULT = true");
+            }
+
+            if (options.has("showStrokeWidthSelect")) {
+                this.showStrokeWidthSelect = options.getString("");
+                Integer tmpShowStrokeWidthSelect = options.getInt("showStrokeWidthSelect");
+                this.showStrokeWidthSelect = tmpShowStrokeWidthSelect.toString();
+                LOG.e(TAG, "Set showStrokeWidthSelect with = " + this.showStrokeWidthSelect);
+            } else {
+                this.showStrokeWidthSelect = "1";
+                LOG.e(TAG, "Set showStrokeWidthSelect DEFAULT = true");
+            }
+
+            if (options.has("setStrokeWidth")) {
+                if (options.getInt("setStrokeWidth") > 0) {
+                    this.setStrokeWidth = options.getString("setStrokeWidth");
+                    LOG.e(TAG, "Set setStrokeWidth with = " + ""+this.setStrokeWidth);
+                } else {
+                    this.setStrokeWidth = "1";
+                    LOG.e(TAG, "Set setStrokeWidth ERROR VALUE DEFAULT = 1");
+                }
+            } else {
+                this.setStrokeWidth = "1";
+                LOG.e(TAG, "Set setStrokeWidth DEFAULT = 1");
+            }
+
+            if (options.has("toolbarBgColor")) {
+                if (options.getString("toolbarBgColor").length() == 7) {
+                    this.toolbarBgColor = options.getString("toolbarBgColor");
+                    LOG.e(TAG, "Set toolbarBgColor with = " + ""+this.toolbarBgColor);
+                } else {
+                    this.toolbarBgColor = "#000000";
+                    LOG.e(TAG, "Set toolbarBgColor ERROR VALUE DEFAULT = #000000");
+                }
+            } else {
+                this.toolbarBgColor = "#000000";
+                LOG.e(TAG, "Set toolbarBgColor DEFAULT = #000000");
+            }
+
+            if (options.has("toolbarTextColor")) {
+                if (options.getString("toolbarTextColor").length() == 7) {
+                    this.toolbarTextColor = options.getString("toolbarTextColor");
+                    LOG.e(TAG, "Set toolbarTextColor with = " + ""+toolbarTextColor);
+                } else {
+                    this.toolbarTextColor = "#FFFFFF";
+                    LOG.e(TAG, "Set toolbarTextColor ERROR VALUE DEFAULT = #FFFFFF");
+                }
+            } else {
+                this.toolbarTextColor = "#FFFFFF";
+                LOG.e(TAG, "Set toolbarTextColor DEFAULT = #FFFFFF");
+            }
 
             int opt = options.getInt("destinationType");
             if (opt >= 0 && opt < DestinationType.values().length) {
@@ -114,6 +178,12 @@ public class Sketch extends CordovaPlugin {
                 touchDrawIntent.putExtra(TouchDrawActivity.BACKGROUND_IMAGE_TYPE,
                         TouchDrawActivity.BackgroundImageType.COLOUR.ordinal());
                 touchDrawIntent.putExtra(TouchDrawActivity.BACKGROUND_COLOUR, "#FFFFFF");
+
+                touchDrawIntent.putExtra(TouchDrawActivity.showColorSelect, Sketch.this.showColorSelect);
+                touchDrawIntent.putExtra(TouchDrawActivity.showStrokeWidthSelect, Sketch.this.showStrokeWidthSelect);
+
+                touchDrawIntent.putExtra(TouchDrawActivity.toolbarBgColor, Sketch.this.toolbarBgColor);
+                touchDrawIntent.putExtra(TouchDrawActivity.toolbarTextColor, Sketch.this.toolbarTextColor);
 
                 if (Sketch.this.encodingType == EncodingType.PNG) {
                     touchDrawIntent.putExtra(TouchDrawActivity.DRAWING_RESULT_ENCODING_TYPE,
@@ -222,6 +292,12 @@ public class Sketch extends CordovaPlugin {
                     touchDrawIntent.putExtra(TouchDrawActivity.DRAWING_RESULT_ENCODING_TYPE,
                             Bitmap.CompressFormat.JPEG.ordinal());
                 }
+
+                touchDrawIntent.putExtra(TouchDrawActivity.showColorSelect, Sketch.this.showColorSelect);
+                touchDrawIntent.putExtra(TouchDrawActivity.showStrokeWidthSelect, Sketch.this.showStrokeWidthSelect);
+
+                touchDrawIntent.putExtra(TouchDrawActivity.toolbarBgColor, Sketch.this.toolbarBgColor);
+                touchDrawIntent.putExtra(TouchDrawActivity.toolbarTextColor, Sketch.this.toolbarTextColor);
 
                 touchDrawIntent.putExtra(TouchDrawActivity.BACKGROUND_IMAGE_URL, inputData);
                 Sketch.this.cordova.getActivity().runOnUiThread(new Runnable() {

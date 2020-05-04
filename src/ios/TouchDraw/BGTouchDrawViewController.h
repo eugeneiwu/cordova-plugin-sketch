@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BGTouchDrawView.h"
 
-#define LINE_WIDTH (3.0f)
+#define LINE_WIDTH (2.0f)
 
 @protocol SaveDrawingProtocol <NSObject>
 
@@ -55,6 +55,8 @@
 
 @property (assign, nonatomic) BOOL hasDrawing;
 
+@property(nonatomic, strong) UIButton *yellowbutton;
+
 @property(nonatomic, strong) UIButton *redButton;
 
 @property(nonatomic, strong) UIButton *blueButton;
@@ -63,13 +65,26 @@
 
 @property(nonatomic, strong) UIButton *blackButton;
 
+@property(nonatomic, strong) UISlider *strokeSlider;
+
 @property(nonatomic, strong) UIColor *colour;
 
+@property(nonatomic, assign) float strokeWidth;
+
 @property(nonatomic, strong) UIBarButtonItem *btColour;
+
+@property(nonatomic, strong) UIBarButtonItem *btStroke;
 
 @property (assign, nonatomic) BOOL shouldResizeContentOnRotate;
 
 @property (assign, nonatomic) BOOL shouldCenterDrawing;
+
+@property (assign, nonatomic) float setStrokeWidth;
+@property (assign, nonatomic) BOOL showStrokeWidthSelect;
+@property (assign, nonatomic) BOOL showColorSelect;
+
+@property (assign, nonatomic) NSString *toolbarBackgroundColor;
+@property (assign, nonatomic) NSString *toolbarTextColor;
 
 - (void)saveAll;
 - (void)clearAll;

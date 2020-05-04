@@ -48,6 +48,12 @@ public class TouchDrawActivity extends Activity {
     public static final String DRAWING_RESULT_SCALE = "drawing_scale";
     public static final String DRAWING_RESULT_ENCODING_TYPE = "drawing_encoding_type";
 
+    public static final String showColorSelect = 1;
+    public static final String showStrokeWidthSelect = 1;
+
+    public static final String toolbarBgColor = "#000000";
+    public static final String toolbarTextColor = "#ffffff";
+
     private Paint mPaint;
     private int mStrokeWidth = 4;
     private int mScale = 35;
@@ -149,7 +155,7 @@ public class TouchDrawActivity extends Activity {
         LinearLayout buttonBar = new LinearLayout(this);
 
         Button doneButton = new Button(this);
-        doneButton.setText("FERTIG");
+        doneButton.setText("FcERTIG");
         doneButton.setBackgroundColor(Color.GREEN);
         doneButton.setLayoutParams(new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30));
@@ -161,7 +167,7 @@ public class TouchDrawActivity extends Activity {
         });
 
         Button eraseButton = new Button(this);
-        eraseButton.setText("Löschen");
+        eraseButton.setText("Löxschen");
         eraseButton.setBackgroundColor(Color.RED);
         eraseButton.setLayoutParams(new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30));
@@ -173,7 +179,7 @@ public class TouchDrawActivity extends Activity {
         });
 
         Button cancelButton = new Button(this);
-        cancelButton.setText("Abbrechen");
+        cancelButton.setText("Asbbrechen");
         cancelButton.setBackgroundColor(Color.RED);
         cancelButton.setLayoutParams(new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30));
@@ -195,8 +201,13 @@ public class TouchDrawActivity extends Activity {
     public LinearLayout createToolBar() {
         LinearLayout toolBar = new LinearLayout(this);
 
-        toolBar.addView(createColourSpinner());
-        toolBar.addView(createWidthSpinner());
+        if(showColorSelect == "1") {
+            toolBar.addView(createColourSpinner());
+        }
+
+        if(showStrokeWidthSelect == "1") {
+            toolBar.addView(createWidthSpinner());
+        }
 
         return toolBar;
     }
@@ -211,6 +222,9 @@ public class TouchDrawActivity extends Activity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView v = (TextView) super.getView(position, convertView, parent);
 
+
+                v.setBackgroundColor(Color.parseColor(toolbarBgColor));
+                v.setTextColor(Color.parseColor(toolbarTextColor));
                 v.setText(strokeColourLabelPrefix + "BLACK");
                 return v;
             }
@@ -232,6 +246,8 @@ public class TouchDrawActivity extends Activity {
                     mPaint.setColor(STROKE_COLOUR_VALUES[position]);
 
                     //adapterView.setBackgroundColor(STROKE_COLOUR_VALUES[position]);
+                    v.setBackgroundColor(Color.parseColor(toolbarBgColor));
+                    v.setTextColor(Color.parseColor(toolbarTextColor));
                     ((TextView) view).setText(strokeColourLabelPrefix + STROKE_COLOUR_LABELS[position]);
                 }
             }
@@ -240,7 +256,10 @@ public class TouchDrawActivity extends Activity {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
-        spinner.setBackgroundColor(Color.LTGRAY);
+        spinner.setBackgroundColor(Color.parseColor(toolbarBgColor));
+
+        //View v = spinner.getSelectedView();
+        //((TextView)v).setTextColor(Color.parseColor(toolbarTextColor));
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30);
@@ -291,7 +310,7 @@ public class TouchDrawActivity extends Activity {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
-        spinner.setBackgroundColor(Color.LTGRAY);
+        spinner.setBackgroundColor(Color.parseColor(toolbarBgColor));
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30);

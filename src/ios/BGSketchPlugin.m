@@ -27,6 +27,14 @@ typedef NSUInteger InputType;
 @property (nonatomic) DestinationType destinationType;
 @property (nonatomic) EncodingType encodingType;
 @property (nonatomic) InputType inputType;
+
+@property (nonatomic) BOOL showStrokeWidthSelect;
+@property (nonatomic) BOOL showColorSelect;
+@property (nonatomic) NSUInteger setStrokeWidth;
+
+@property (nonatomic) NSString *toolbarBackgroundColor;
+@property (nonatomic) NSString *toolbarTextColor;
+
 @property (nonatomic, copy) NSString *inputData;
 @property (nonatomic, retain) UINavigationController *navigationController;
 @property (nonatomic, retain) BGTouchDrawViewController *touchDrawController;
@@ -43,6 +51,57 @@ typedef NSUInteger InputType;
     if (!options || options.count == 0) {
         [self sendErrorResultWithMessage:@"Insufficent number of options"];
         return;
+    }
+    
+    if ([options objectForKey:@"toolbarBgColor"]) {
+        if([options[@"toolbarBgColor"] length] == 7) {
+            NSLog(@"set toolbarBackgroundColor = %@", options[@"toolbarBgColor"]);
+            self.toolbarBackgroundColor = [options[@"toolbarBgColor"] stringValue];
+        } else {
+            NSLog(@"option toolbarBgColor wrong - to default true - given = %@", options[@"toolbarBgColor"]);
+            self.toolbarBackgroundColor = @"#000000";
+        }
+    } else {
+        NSLog(@"option toolbarBgColor not set - to default true");
+        self.toolbarBackgroundColor = @"#000000";
+    }
+    
+    if ([options objectForKey:@"toolbarTextColor"]) {
+        if([options[@"toolbarTextColor"] length] == 7) {
+            NSLog(@"set toolbarTextColor = %@", options[@"toolbarTextColor"]);
+            self.toolbarTextColor = [options[@"toolbarTextColor"] stringValue];
+        } else {
+            NSLog(@"option toolbarTextColor wrong - to default true - given = %@", options[@"toolbarTextColor"]);
+            self.toolbarTextColor = @"#FFFFFF";
+        }
+    } else {
+        NSLog(@"option toolbarTextColor not set - to default true");
+        self.toolbarTextColor = @"#FFFFFF";
+    }
+    
+    
+    if ([options objectForKey:@"showStrokeWidthSelect"]) {
+        NSLog(@"set showStrokeWidthSelect = %@", options[@"showStrokeWidthSelect"]);
+        self.showStrokeWidthSelect = [options[@"showStrokeWidthSelect"] boolValue];
+    } else {
+        NSLog(@"option showStrokeWidthSelect not set - to default true");
+        self.showStrokeWidthSelect = true;
+    }
+    
+    if ([options objectForKey:@"showColorSelect"]) {
+        NSLog(@"set showColorSelect = %@", options[@"showColorSelect"]);
+        self.showColorSelect = [options[@"showColorSelect"] boolValue];
+    } else {
+        NSLog(@"option showColorSelect not set - to default true");
+        self.showColorSelect = true;
+    }
+    
+    if ([options objectForKey:@"setStrokeWidth"]) {
+        NSLog(@"set setStrokeWidth = %@", options[@"setStrokeWidth"]);
+        self.setStrokeWidth = [options[@"setStrokeWidth"] integerValue];
+    } else {
+        NSLog(@"option setStrokeWidth not set - to default 2");
+        self.setStrokeWidth = 2;
     }
 
     NSUInteger destinationType = [options[@"destinationType"] integerValue];
@@ -138,12 +197,24 @@ typedef NSUInteger InputType;
             touchDrawVC.delegate = self;
             touchDrawVC.shouldCenterDrawing = YES;
             touchDrawVC.shouldResizeContentOnRotate = NO;
+            
+            touchDrawVC.showStrokeWidthSelect = self.showStrokeWidthSelect;
+            touchDrawVC.showColorSelect = self.showColorSelect;
+            touchDrawVC.setStrokeWidth = self.setStrokeWidth;
+            
+            touchDrawVC.toolbarBackgroundColor = self.toolbarBackgroundColor;
+            touchDrawVC.toolbarTextColor = self.toolbarTextColor;
+            
             self.touchDrawController = touchDrawVC;
 
             UIViewController *rootVC = [[UIViewController alloc] init]; // dummy root view controller
             UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:rootVC];
             [rootVC.navigationController setNavigationBarHidden:YES];
             [navVC pushViewController:touchDrawVC animated:NO];
+            
+            // ios 13 fix
+            [navVC setModalPresentationStyle:UIModalPresentationFullScreen];
+            
             [self.viewController presentViewController:navVC animated:YES completion:nil];
             self.navigationController = navVC;
         });
@@ -164,12 +235,24 @@ typedef NSUInteger InputType;
             touchDrawVC.delegate = self;
             touchDrawVC.shouldCenterDrawing = NO;
             touchDrawVC.shouldResizeContentOnRotate = YES;
+            
+            touchDrawVC.showStrokeWidthSelect = self.showStrokeWidthSelect;
+            touchDrawVC.showColorSelect = self.showColorSelect;
+            touchDrawVC.setStrokeWidth = self.setStrokeWidth;
+            
+            touchDrawVC.toolbarBackgroundColor = self.toolbarBackgroundColor;
+            touchDrawVC.toolbarTextColor = self.toolbarTextColor;
+            
             self.touchDrawController = touchDrawVC;
 
             UIViewController *rootVC = [[UIViewController alloc] init]; // dummy root view controller.
             UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:rootVC];
             [rootVC.navigationController setNavigationBarHidden:YES];
             [navVC pushViewController:touchDrawVC animated:NO];
+            
+            // ios 13 fix
+            [navVC setModalPresentationStyle:UIModalPresentationFullScreen];
+            
             [self.viewController presentViewController:navVC animated:YES completion:nil];
             self.navigationController = navVC;
         });
