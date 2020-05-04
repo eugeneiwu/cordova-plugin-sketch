@@ -33,6 +33,8 @@ NEW
 - toolbarBgColor (optional, iOS only as of 04/05/2020)
 - toolbarTextColor (optional, iOS only as of 04/05/2020)
 
+*For iOS 13 added the FULLSCREEN info for the ViewController, without, drawing on the canvas was impossoible due to the fact, that the Controller Modal didi move when attempting to draw.*
+
 The **destinationType** is the return image type, the available options are: DATA_URL, FILE_URI. If DestinationType is DATA_URL the plugin will return a string. If the DestinationType is FILE_URI, the plugin will return a file URI. The default is DATA_URL.
 
 The **EncodingType** is the return image encode type, the available options are: JPEG, PNG. The plugin will encode the return image based on EncodingType. If you didn't define EncodingType, the plugin will return a PNG format image.
