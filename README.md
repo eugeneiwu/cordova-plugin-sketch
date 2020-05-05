@@ -4,11 +4,11 @@ This plugin defines a navigator.Sketch object, which supplies an interface to la
 
 ## Installation
 
-```sh
+```
 cordova plugin add https://github.com/bendspoons/cordova-plugin-sketch.git
 ```
 
-## Sketch.getSketch
+## getSketch
 
 Displays a dialog which will allow user draw something or annotate a picture based on input options.
 
@@ -42,25 +42,50 @@ The **inputType** describes how to use the data provided in inputData. If you pr
 
 The **inputData** is a string or file URI of the background picture, depending on inputType.
 
-**showStrokeWidthSelect** 0 (= do not show) or 1 (= show), defaults to 1
+**showStrokeWidthSelect**
 
-**showColorSelect** 0 (= do not show) or 1 (= show), defaults to 1
+0 (= do not show) or 1 (= show), defaults to 1
 
-**setStrokeWidth** 1 - 24 (theoretically even higher possible, but system only display 1 - 24, but crashes on Android (to be fixed)), defaults to 1
+**showColorSelect** 
 
-**toolbarBgColor** Color of the Toolbars (top, bottom), Hex Color like #FA2000, no shortcut like #FFF allowed, defaults to #f5f6f6
+0 (= do not show) or 1 (= show), defaults to 1
 
-**toolbarBgColor** Color of the Toolbars (top, bottom), Hex Color like #FFFFFF, no shortcut like #FFF allowed, defaults to #007aff
+**setStrokeWidth** 
 
-**text** JSON Object, with
-backBtn     : '< zurück',
-clearBtn    : 'löschen',
-clearTitle  : 'Eintrag löschen?',
-clearText   : 'Den gesamten Inhalt jetzt zurücksetzen?',
-colorBtn    : 'Textfarbe',
-strokeBtn   : 'Strichstärke',
-saveBtn     : 'Speichern'
+1 - 24 (theoretically even higher possible, but system only display 1 - 24, but crashes on Android (to be fixed)), defaults to 1
 
+**toolbarBgColor** 
+
+Color of the Toolbars (top, bottom), Hex Color like #FA2000, no shortcut like #FFF allowed, defaults to #f5f6f6
+
+**toolbarBgColor** 
+
+Color of the Toolbars (top, bottom), Hex Color like #FFFFFF, no shortcut like #FFF allowed, defaults to #007aff
+
+
+**text**
+
+	 
+	
+	JSON Object
+	{
+	
+	backBtn     : 'zurück',
+	
+	clearBtn    : 'löschen',
+	
+	clearTitle  : 'Eintrag löschen?',
+	
+	clearText   : 'Den gesamten Inhalt jetzt zurücksetzen?',
+	
+	colorBtn    : 'Textfarbe',
+	
+	strokeBtn   : 'Strichstärke',
+	
+	saveBtn     : 'Speichern'
+	
+	}
+	
 When the user presses "done", returns the image of the user sketched as an Data URI or file URI depending on input DestinationType.
 
 If the user presses "cancel", the result is `null`.
@@ -80,56 +105,55 @@ Further Improvements:
 
 Create a button on your page
 
-```html
-<button id="cordova-plugin-sketch-open">Sketch</button>
-<img id="myImage" height="400" width="600"/>
-```
+    
+    <button id="cordova-plugin-sketch-open">Sketch</button>
+    <img id="myImage" height="400" width="600"/>
+
 
 Then add click event
 
-```javascript
-document.getElementById("cordova-plugin-sketch-open").addEventListener("click", getSketch, false);
-
-function getSketch(){
-  var image = document.getElementById('myImage');
-  navigator.sketch.getSketch(onSuccess, onFail, {
-    destinationType       : navigator.sketch.DestinationType.DATA_URL,
-    encodingType          : navigator.sketch.EncodingType.JPEG,
-    showColorSelect       : 1,
+    javascriptdocument.getElementById("cordova-plugin-sketch-open").addEventListener("click", getSketch, false);
+    
+    function getSketch(){
+      var image = document.getElementById('myImage');
+      navigator.sketch.getSketch(onSuccess, onFail, {
+    destinationType   : navigator.sketch.DestinationType.DATA_URL,
+    encodingType  : navigator.sketch.EncodingType.JPEG,
+    showColorSelect   : 1,
     showStrokeWidthSelect : 1,
-    setStrokeWidth        : 8,
-    toolbarBgColor        : '#007BFF',
-    toolbarTextColor      : '#FFFFFF',
-    text                  : {
-      'backBtn'     : '< zurück',
-      'clearBtn'    : 'löschen',
+    setStrokeWidth: 8,
+    toolbarBgColor: '#007BFF',
+    toolbarTextColor  : '#FFFFFF',
+    text  : {
+      'backBtn' : '< zurück',
+      'clearBtn': 'löschen',
       'clearTitle'  : 'Eintrag löschen?',
       'clearText'   : 'Den gesamten Inhalt jetzt zurücksetzen?',
-      'colorBtn'    : 'Textfarbe',
+      'colorBtn': 'Textfarbe',
       'strokeBtn'   : 'Strichstärke',
-      'saveBtn'     : 'Speichern'
+      'saveBtn' : 'Speichern'
     }
-    inputType             : navigator.sketch.InputType.FILE_URI,
-    inputData             : ''
-  });
-}
-
-function onSuccess(imageData) {
-  if(imageData == null) { return; }
-  setTimeout(function() {
-  // do your thing here!
+    inputType : navigator.sketch.InputType.FILE_URI,
+    inputData : ''
+      });
+    }
+    
+    function onSuccess(imageData) {
+      if(imageData == null) { return; }
+      setTimeout(function() {
+      // do your thing here!
     var image = document.getElementById('myImage');
     if(imageData.indexOf("data:image") >= 0 ) {
       image.src = imageData;
     } else {
       image.src = "data:image/png;base64," + imageData;
     }
-  }, 0);
-}
-
-function onFail(message) {
+      }, 0);
+    }
+    
+    function onFail(message) {
     setTimeout(function() {
       console.log('plugin message: ' + message);
     }, 0);
-}
+    }
 ```
