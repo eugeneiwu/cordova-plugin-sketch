@@ -2,12 +2,6 @@
 
 This plugin defines a navigator.Sketch object, which supplies an interface to launch a sketch pad, allowing the user to draw something or annotate a picture.
 
-## Installation
-
-```
-cordova plugin add https://github.com/bendspoons/cordova-plugin-sketch.git
-```
-
 ## getSketch
 
 Displays a dialog which will allow user draw something or annotate a picture based on input options.
