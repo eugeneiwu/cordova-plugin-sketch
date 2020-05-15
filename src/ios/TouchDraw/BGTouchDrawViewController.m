@@ -145,7 +145,7 @@
                                                                               target:nil
                                                                               action:nil];
     
-    self.btColour = [[UIBarButtonItem alloc] initWithTitle:@"Schriftfarbe"
+    self.btColour = [[UIBarButtonItem alloc] initWithTitle:@"Color"
                                                      style:UIBarButtonItemStylePlain
                                                     target:self
                                                     action:@selector(toggleColour:event:)];
@@ -160,7 +160,7 @@
         NSLog(@"showColorSelect NOT");
     }
     
-    self.btStroke = [[UIBarButtonItem alloc] initWithTitle:@"Strichstärke"
+    self.btStroke = [[UIBarButtonItem alloc] initWithTitle:@"Width"
                                                      style:UIBarButtonItemStylePlain
                                                     target:self
                                                     action:@selector(toggleStrokeWidth:event:)];
@@ -666,13 +666,13 @@
 {
     NSLog(@"clearAll ");
     
-    UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Notiz löschen" message:@"Alle Daten zurücksetzen?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Delete Note" message:@"Reset all data?" preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *buttonOk = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self actionClearOk];
     }];
        
-    UIAlertAction *buttonCancel = [UIAlertAction actionWithTitle:@"Abbrechen" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *buttonCancel = [UIAlertAction actionWithTitle:@"Abort" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
     }];
 
     [controller addAction:buttonCancel];
