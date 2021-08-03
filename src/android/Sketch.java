@@ -385,7 +385,6 @@ public class Sketch extends CordovaPlugin {
 
         try {
             String ext = "";
-            String imgName = "image";
 
             if (encodingType == EncodingType.JPEG) {
                 ext = "jpeg";
@@ -397,7 +396,7 @@ public class Sketch extends CordovaPlugin {
                 output = "data:image/" + ext + ";base64," + Base64.encodeToString(drawingData, Base64.DEFAULT);
             } else if (destinationType == DestinationType.FILE_URI) {
                 // Save the drawing to the app's cache dir
-                String fileName = String.format("sketch-%s.%s", imgName, ext);
+                String fileName = String.format("sketch-%s.%s", UUID.randomUUID(), ext);
                 File filePath = new File(this.cordova.getActivity().getCacheDir(), fileName);
 
                 FileOutputStream fos = new FileOutputStream(filePath);
