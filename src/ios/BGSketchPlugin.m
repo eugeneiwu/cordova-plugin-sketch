@@ -285,6 +285,8 @@ typedef NSUInteger InputType;
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
         NSData *drawingData;
         NSString *encType;
+        NSString *imgName;
+        imgName = @"image";
         if (self.encodingType == EncodingTypeJPEG) {
             drawingData = UIImageJPEGRepresentation(drawing, 1.0f);
             encType = @"jpeg";
@@ -297,7 +299,7 @@ typedef NSUInteger InputType;
         if (self.destinationType == DestinationTypeDataUrl) {
             message = [NSString stringWithFormat:@"data:image/%@;base64,%@", encType, [drawingData base64EncodedStringWithOptions:0]];
         } else if (self.destinationType == DestinationTypeFileUri) {
-            NSString *fileName = [NSString stringWithFormat:@"sketch-%@.%@", [NSUUID UUID].UUIDString, encType];
+            NSString *fileName = [NSString stringWithFormat:@"sketch-%@.%@", imgName, encType];
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSURL *filePath = [NSURL fileURLWithPath:[paths[0] stringByAppendingPathComponent:fileName]];
             NSError *error = nil;
