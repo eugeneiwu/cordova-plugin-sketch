@@ -5,8 +5,12 @@
   "cordova": {
     "id": "cordova-plugin-sketch",
     "platforms": [
-      "windows"
+      "android"
     ]
+  },
+   "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eugeneiwu/cordova-plugin-sketch.git"
   },
   "keywords": [
     "cordova",
@@ -14,7 +18,7 @@
     "drawing",
     "signature",
     "ecosystem:cordova",
-    "cordova-windows"
+    "cordova-android"
   ],
   "devDependencies": {
     "eslint": "^1.1",
