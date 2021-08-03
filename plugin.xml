@@ -7,6 +7,7 @@
     <description>Cordova Sketch Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova,sketch,signature,draw</keywords>
+    <repo>https://github.com/eugeneiwu/cordova-plugin-sketch.git</repo>
 
     <js-module src="www/sketch.js" name="sketch">
         <clobbers target="navigator.sketch" />
