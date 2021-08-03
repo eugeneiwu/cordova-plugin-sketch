@@ -457,8 +457,8 @@ public class Sketch extends CordovaPlugin {
     }
 
     enum EncodingType {
-        JPEG,
-        PNG
+        PNG,
+        JPEG
     }
 
     enum InputType {
