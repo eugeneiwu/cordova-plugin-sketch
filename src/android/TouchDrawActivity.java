@@ -90,11 +90,11 @@ public class TouchDrawActivity extends Activity {
     //private static final String[] STROKE_COLOUR_LABELS = {"RED", "BLUE", "GREEN", "BLACK"};
     //private static final int[] STROKE_COLOUR_VALUES = {Color.RED, Color.BLUE, Color.GREEN, Color.BLACK};
 
-    private static final String[] STROKE_COLOUR_LABELS = {"Schwarz", "Blau", "Rot", "Magenta", "Gelb", "Cyan", "Grau", "Dunkelgrau", "Hellgrau", "Radiergummi"};
-    private static final int[] STROKE_COLOUR_VALUES = {Color.BLACK, Color.BLUE, Color.RED, Color.MAGENTA, Color.YELLOW, Color.CYAN, Color.GRAY, Color.DKGRAY, Color.LTGRAY, Color.WHITE};
+    private static final String[] STROKE_COLOUR_LABELS = {"Rot", "Blau", "Schwarz", "Magenta", "Gelb", "Cyan", "Grau", "Dunkelgrau", "Hellgrau", "Radiergummi"};
+    private static final int[] STROKE_COLOUR_VALUES = {Color.RED, Color.BLUE, Color.BLACK, Color.MAGENTA, Color.YELLOW, Color.CYAN, Color.GRAY, Color.DKGRAY, Color.LTGRAY, Color.WHITE};
 
-    private static final String[] STROKE_WIDTH_LABELS = {"1x", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x"};
-    private static final Integer[] STROKE_WIDTH_VALUES = {1,2,3,4,5,6,7,8,9};
+    private static final String[] STROKE_WIDTH_LABELS = {"9x", "8x", "7x", "6x", "5x", "4x", "3x", "2x", "1x"};
+    private static final Integer[] STROKE_WIDTH_VALUES = {9,8,7,6,5,4,3,2,1};
 
     public enum BackgroundImageType {
         DATA_URL,
