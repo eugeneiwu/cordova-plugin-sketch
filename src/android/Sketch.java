@@ -102,13 +102,13 @@ public class Sketch extends CordovaPlugin {
                         this.setStrokeWidth = options.getInt("setStrokeWidth");
                         LOG.e(TAG, "Set setStrokeWidth with = " + ""+this.setStrokeWidth);
                     } else {
-                        this.setStrokeWidth = 1;
-                        LOG.e(TAG, "Set setStrokeWidth ERROR VALUE DEFAULT = 1");
+                        this.setStrokeWidth = 9;
+                        LOG.e(TAG, "Set setStrokeWidth ERROR VALUE DEFAULT = 9");
                     }
                 }
             } else {
-                this.setStrokeWidth = 1;
-                LOG.e(TAG, "Set setStrokeWidth DEFAULT = 1");
+                this.setStrokeWidth = 9;
+                LOG.e(TAG, "Set setStrokeWidth DEFAULT = 9");
             }
 
 
