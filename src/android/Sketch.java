@@ -44,7 +44,7 @@ public class Sketch extends CordovaPlugin {
 
     private Integer showColorSelect = 1;
     private Integer showStrokeWidthSelect = 1;
-    private Integer setStrokeWidth = 1;
+    private Integer setStrokeWidth = 9;
     private String toolbarBgColor = "#f5f6f6";
     private String toolbarTextColor = "#007aff";
     private String textValues;
