@@ -76,7 +76,7 @@ public class TouchDrawActivity extends Activity {
     public String saveBtn = "Save";
 
     private Paint mPaint;
-    private int mStrokeWidth = 4;
+    private int mStrokeWidth = 9;
     private int mScale = 75;
     private Bitmap mBitmap;
     private TouchDrawView mTdView;
@@ -93,8 +93,8 @@ public class TouchDrawActivity extends Activity {
     private static final String[] STROKE_COLOUR_LABELS = {"Schwarz", "Blau", "Rot", "Magenta", "Gelb", "Cyan", "Grau", "Dunkelgrau", "Hellgrau", "Radiergummi"};
     private static final int[] STROKE_COLOUR_VALUES = {Color.BLACK, Color.BLUE, Color.RED, Color.MAGENTA, Color.YELLOW, Color.CYAN, Color.GRAY, Color.DKGRAY, Color.LTGRAY, Color.WHITE};
 
-    private static final String[] STROKE_WIDTH_LABELS = {"1x", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x", "10x", "11x", "12x", "13x", "14x", "15x", "16x", "17x", "18x", "19x", "20x", "21x", "22x", "23x", "24x"};
-    private static final Integer[] STROKE_WIDTH_VALUES = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24};
+    private static final String[] STROKE_WIDTH_LABELS = {"1x", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x"};
+    private static final Integer[] STROKE_WIDTH_VALUES = {1,2,3,4,5,6,7,8,9};
 
     public enum BackgroundImageType {
         DATA_URL,
