@@ -400,7 +400,7 @@ public class TouchDrawActivity extends Activity {
                 ((TextView) view).setBackgroundColor(Color.parseColor(toolbarBgColor));
                 ((TextView) view).setTextColor(Color.parseColor(toolbarTextColor));
                 ((TextView) view).setTypeface(Typeface.SANS_SERIF);
-                //((TextView) view).setText(strokeWidthLabelPrefix + STROKE_WIDTH_LABELS[Arrays.asList(STROKE_WIDTH_VALUES).indexOf(mStrokeWidth)]);
+                ((TextView) view).setText(strokeWidthLabelPrefix + STROKE_WIDTH_LABELS[Arrays.asList(STROKE_WIDTH_VALUES).indexOf(mStrokeWidth)]);
                 ((TextView) view).setText(strokeWidthLabelPrefix + mStrokeWidth);
                 //((TextView) view).setText(strokeWidthLabelPrefix);
 
