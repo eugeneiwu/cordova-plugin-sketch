@@ -119,7 +119,7 @@ public class TouchDrawActivity extends Activity {
 
             showColorSelect = Integer.parseInt(intentExtras.getString("showColorSelect"));
             showStrokeWidthSelect = Integer.parseInt(intentExtras.getString("showStrokeWidthSelect"));
-            //mStrokeWidth = Integer.parseInt(intentExtras.getString("setStrokeWidth"));
+            mStrokeWidth = Integer.parseInt(intentExtras.getString("setStrokeWidth"));
 
             toolbarBgColor = intentExtras.getString("toolbarBgColor");
             toolbarTextColor = intentExtras.getString("toolbarTextColor");
