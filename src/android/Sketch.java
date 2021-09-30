@@ -203,7 +203,7 @@ public class Sketch extends CordovaPlugin {
 
                 touchDrawIntent.putExtra("showColorSelect", Sketch.this.showColorSelect.toString());
                 touchDrawIntent.putExtra("showStrokeWidthSelect", Sketch.this.showStrokeWidthSelect.toString());
-                //touchDrawIntent.putExtra("setStrokeWidth", Sketch.this.setStrokeWidth.toString());
+                touchDrawIntent.putExtra("setStrokeWidth", Sketch.this.setStrokeWidth.toString());
 
                 touchDrawIntent.putExtra("toolbarBgColor", Sketch.this.toolbarBgColor);
                 touchDrawIntent.putExtra("toolbarTextColor", Sketch.this.toolbarTextColor);
