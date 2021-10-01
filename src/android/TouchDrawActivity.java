@@ -584,6 +584,11 @@ public class TouchDrawActivity extends Activity {
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
+            
+            //01-10-2021. EI: added code below to prevent OS Crash due to null object
+            if (mBitmap == null) {
+                return;
+            }
 
             float newWidth = w;
             float newHeight = h;
