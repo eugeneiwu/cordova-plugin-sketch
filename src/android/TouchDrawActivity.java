@@ -586,32 +586,33 @@ public class TouchDrawActivity extends Activity {
             super.onSizeChanged(w, h, oldw, oldh);
             
             //01-10-2021. EI: added code below to prevent OS Crash due to null object
-            if (mBitmap != null) {                            
-
-               float newWidth = w;
-               float newHeight = h;
-
-               float bitmapWidth = mBitmap.getWidth();
-               float bitmapHeight = mBitmap.getHeight();
-
-               if (mBackgroundImageType != BackgroundImageType.COLOUR) {
-                   if (w != bitmapWidth || h != bitmapHeight) {
-                       float xRatio = w / bitmapWidth;
-                       float yRatio = h / bitmapHeight;
-
-                       float dominatingRatio = Math.min(xRatio, yRatio);
-
-                       newWidth = dominatingRatio * bitmapWidth;
-                       newHeight = dominatingRatio * bitmapHeight;
-
-                   }
-               }
-
-               mBitmap = Bitmap.createScaledBitmap(mBitmap, Math.round(newWidth),
-                       Math.round(newHeight), false);
-
-               mCanvas.setBitmap(mBitmap);
+            if (mBitmap == null) {
+                return;
             }
+
+            float newWidth = w;
+            float newHeight = h;
+
+            float bitmapWidth = mBitmap.getWidth();
+            float bitmapHeight = mBitmap.getHeight();
+
+            if (mBackgroundImageType != BackgroundImageType.COLOUR) {
+                if (w != bitmapWidth || h != bitmapHeight) {
+                    float xRatio = w / bitmapWidth;
+                    float yRatio = h / bitmapHeight;
+
+                    float dominatingRatio = Math.min(xRatio, yRatio);
+
+                    newWidth = dominatingRatio * bitmapWidth;
+                    newHeight = dominatingRatio * bitmapHeight;
+
+                }
+            }
+
+            mBitmap = Bitmap.createScaledBitmap(mBitmap, Math.round(newWidth),
+                    Math.round(newHeight), false);
+
+            mCanvas.setBitmap(mBitmap);
         }
 
         @Override
