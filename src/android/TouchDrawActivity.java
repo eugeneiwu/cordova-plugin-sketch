@@ -479,6 +479,9 @@ public class TouchDrawActivity extends Activity {
     }
 
     public Bitmap scaleBitmap(Bitmap bitmap) {
+        if (bitmap == null) {
+                return bitmap;
+            }
         int origWidth = bitmap.getWidth();
         int origHeight = bitmap.getHeight();
         int newWidth, newHeight;
