@@ -500,12 +500,14 @@ public class TouchDrawActivity extends Activity {
     }
 
     public void finishDrawing() {
-        ByteArrayOutputStream drawing = new ByteArrayOutputStream();
-        scaleBitmap(mBitmap).compress(mEncodingType, 100, drawing);
-
-        Intent drawingResult = new Intent();
-        drawingResult.putExtra(DRAWING_RESULT_PARCELABLE, drawing.toByteArray());
-        setResult(Activity.RESULT_OK, drawingResult);
+        if (mBitmap != null) {
+            ByteArrayOutputStream drawing = new ByteArrayOutputStream();
+            scaleBitmap(mBitmap).compress(mEncodingType, 100, drawing);
+            Intent drawingResult = new Intent();
+            drawingResult.putExtra(DRAWING_RESULT_PARCELABLE, drawing.toByteArray());
+            setResult(Activity.RESULT_OK, drawingResult);
+        }
+       
         finish();
     }
 
