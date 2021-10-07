@@ -503,19 +503,22 @@ public class TouchDrawActivity extends Activity {
     }
 
     public void finishDrawing() {
-        if (mBitmap != null) {
-            ByteArrayOutputStream drawing = new ByteArrayOutputStream();
-            scaleBitmap(mBitmap).compress(mEncodingType, 100, drawing);
-            Intent drawingResult = new Intent();
-            drawingResult.putExtra(DRAWING_RESULT_PARCELABLE, drawing.toByteArray());
-            setResult(Activity.RESULT_OK, drawingResult);
+        if (mBitmap == null) {
+            return;
         }
-       
+        ByteArrayOutputStream drawing = new ByteArrayOutputStream();
+        scaleBitmap(mBitmap).compress(mEncodingType, 100, drawing);
+        Intent drawingResult = new Intent();
+        drawingResult.putExtra(DRAWING_RESULT_PARCELABLE, drawing.toByteArray());
+        setResult(Activity.RESULT_OK, drawingResult);
         finish();
     }
 
     @Override
     public void finish() {
+        if (mBitmap == null) {
+            return;
+        }
         if (mBitmap != null) {
             mBitmap.recycle();
             mBitmap = null;
@@ -588,12 +591,11 @@ public class TouchDrawActivity extends Activity {
 
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-            super.onSizeChanged(w, h, oldw, oldh);
-            
-            //01-10-2021. EI: added code below to prevent OS Crash due to null object
+            //07-10-2021. EI: added code below to prevent OS Crash due to null object
             if (mBitmap == null) {
                 return;
             }
+            super.onSizeChanged(w, h, oldw, oldh);                     
 
             float newWidth = w;
             float newHeight = h;
@@ -622,11 +624,11 @@ public class TouchDrawActivity extends Activity {
 
         @Override
         protected void onDraw(Canvas canvas) {
+            if (mBitmap == null) {
+                return;
+            }
             canvas.drawColor(Color.argb(a, r, g, b));
-            //01-10-2021. EI: added code below to prevent OS Crash due to null object
-            if (mBitmap != null) {
-                canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
-            }         
+            canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
             canvas.drawPath(mPath, mPaint);
         }
 
