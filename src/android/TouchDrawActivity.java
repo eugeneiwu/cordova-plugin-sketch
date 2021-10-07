@@ -215,8 +215,14 @@ public class TouchDrawActivity extends Activity {
         //cancelButton.setText("< zurück");
         cancelButton.setText(backBtn);
         cancelButton.setTypeface(Typeface.SANS_SERIF);
-        cancelButton.setBackgroundColor(Color.parseColor(((toolbarBgColor != null) ? toolbarBgColor : "#FFFFFF";)));
-        cancelButton.setTextColor(Color.parseColor((toolbarTextColor != null) ? toolbarTextColor : "#000000";)));
+        if (toolbarBgColor == null) {
+                toolbarBgColor = "#FFFFFF";
+        }
+        if (toolbarTextColor == null) {
+                toolbarTextColor = "#000000";
+        }
+        cancelButton.setBackgroundColor(Color.parseColor(toolbarBgColor));
+        cancelButton.setTextColor(Color.parseColor(toolbarTextColor));
         cancelButton.setLayoutParams(new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30));
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -231,8 +237,14 @@ public class TouchDrawActivity extends Activity {
         //eraseButton.setText("Löschen");
         eraseButton.setText(clearBtn);
         eraseButton.setTypeface(Typeface.SANS_SERIF);
-        eraseButton.setBackgroundColor(Color.parseColor((toolbarBgColor != null) ? toolbarBgColor : "#FFFFFF";)));
-        eraseButton.setTextColor(Color.parseColor((toolbarTextColor != null) ? toolbarTextColor : "#000000";)));
+        if (toolbarBgColor == null) {
+                toolbarBgColor = "#FFFFFF";
+        }
+        if (toolbarTextColor == null) {
+                toolbarTextColor = "#000000";
+        }
+        eraseButton.setBackgroundColor(Color.parseColor(toolbarBgColor));
+        eraseButton.setTextColor(Color.parseColor(toolbarTextColor));
         eraseButton.setLayoutParams(new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30));
         eraseButton.setOnClickListener(new View.OnClickListener() {
@@ -256,8 +268,14 @@ public class TouchDrawActivity extends Activity {
         //doneButton.setText("Speichern");
         doneButton.setText(saveBtn);
         doneButton.setTypeface(Typeface.SANS_SERIF);
-        doneButton.setBackgroundColor(Color.parseColor((toolbarBgColor != null) ? toolbarBgColor : "#FFFFFF";)));
-        doneButton.setTextColor(Color.parseColor((toolbarTextColor != null) ? toolbarTextColor : "#000000";)));
+        if (toolbarBgColor == null) {
+                toolbarBgColor = "#FFFFFF";
+        }
+        if (toolbarTextColor == null) {
+                toolbarTextColor = "#000000";
+        }
+        doneButton.setBackgroundColor(Color.parseColor(toolbarBgColor));
+        doneButton.setTextColor(Color.parseColor(toolbarTextColor));
         doneButton.setLayoutParams(new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30));
         doneButton.setOnClickListener(new View.OnClickListener() {
@@ -290,10 +308,15 @@ public class TouchDrawActivity extends Activity {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView v = (TextView) super.getView(position, convertView, parent);
+                if (toolbarBgColor == null) {
+                    toolbarBgColor = "#FFFFFF";
+                }
+                if (toolbarTextColor == null) {
+                    toolbarTextColor = "#000000";
+                }
 
-
-                v.setBackgroundColor(Color.parseColor((toolbarBgColor != null) ? toolbarBgColor : "#FFFFFF";)));
-                v.setTextColor(Color.parseColor((toolbarTextColor != null) ? toolbarTextColor : "#000000";)));
+                v.setBackgroundColor(Color.parseColor(toolbarBgColor));
+                v.setTextColor(Color.parseColor(toolbarTextColor));
                 v.setTypeface(Typeface.SANS_SERIF);
                 v.setText(strokeColourLabelPrefix);
                 return v;
@@ -332,10 +355,16 @@ public class TouchDrawActivity extends Activity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 if (mPaint != null && position >= 0 && position < STROKE_COLOUR_VALUES.length) {
                     mPaint.setColor(STROKE_COLOUR_VALUES[position]);
-
                     //adapterView.setBackgroundColor(STROKE_COLOUR_VALUES[position]);
-                    ((TextView) view).setBackgroundColor(Color.parseColor((toolbarBgColor != null) ? toolbarBgColor : "#FFFFFF";)));
-                    ((TextView) view).setTextColor(Color.parseColor((toolbarTextColor != null) ? toolbarTextColor : "#000000";)));
+                    
+                    if (toolbarBgColor == null) {
+                        toolbarBgColor = "#FFFFFF";
+                    }
+                    if (toolbarTextColor == null) {
+                        toolbarTextColor = "#000000";
+                    }
+                    ((TextView) view).setBackgroundColor(Color.parseColor(toolbarBgColor));
+                    ((TextView) view).setTextColor(Color.parseColor(toolbarTextColor));
                     ((TextView) view).setTypeface(Typeface.SANS_SERIF);
                     ((TextView) view).setText(strokeColourLabelPrefix);
                 }
@@ -345,7 +374,12 @@ public class TouchDrawActivity extends Activity {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
-        spinner.setBackgroundColor(Color.parseColor((toolbarBgColor != null) ? toolbarBgColor : "#FFFFFF";)));
+        
+        if (toolbarBgColor == null) {
+            toolbarBgColor = "#FFFFFF";
+        }
+       
+        spinner.setBackgroundColor(Color.parseColor(toolbarBgColor));
         spinner.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
         //View v = spinner.getSelectedView();
@@ -371,9 +405,15 @@ public class TouchDrawActivity extends Activity {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView v = (TextView) super.getView(position, convertView, parent);
-
-                v.setBackgroundColor(Color.parseColor((toolbarBgColor != null) ? toolbarBgColor : "#FFFFFF";)));
-                v.setTextColor(Color.parseColor((toolbarTextColor != null) ? toolbarTextColor : "#000000";)));
+                
+                if (toolbarBgColor == null) {
+                    toolbarBgColor = "#FFFFFF";
+                }
+                if (toolbarTextColor == null) {
+                    toolbarTextColor = "#000000";
+                }
+                v.setBackgroundColor(Color.parseColor(toolbarBgColor));
+                v.setTextColor(Color.parseColor(toolbarTextColor));
                 v.setTypeface(Typeface.SANS_SERIF);
                 //v.setText(strokeWidthLabelPrefix + STROKE_WIDTH_LABELS[Arrays.asList(STROKE_WIDTH_VALUES).indexOf(mStrokeWidth)]);
                 v.setText(strokeWidthLabelPrefix + mStrokeWidth);
@@ -396,9 +436,16 @@ public class TouchDrawActivity extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 mStrokeWidth = STROKE_WIDTH_VALUES[position];
+                
+                if (toolbarBgColor == null) {
+                    toolbarBgColor = "#FFFFFF";
+                }
+                if (toolbarTextColor == null) {
+                    toolbarTextColor = "#000000";
+                }
 
-                ((TextView) view).setBackgroundColor(Color.parseColor((toolbarBgColor != null) ? toolbarBgColor : "#FFFFFF";)));
-                ((TextView) view).setTextColor(Color.parseColor((toolbarTextColor != null) ? toolbarTextColor : "#000000";)));
+                ((TextView) view).setBackgroundColor(Color.parseColor(toolbarBgColor));
+                ((TextView) view).setTextColor(Color.parseColor(toolbarTextColor));
                 ((TextView) view).setTypeface(Typeface.SANS_SERIF);
                 ((TextView) view).setText(strokeWidthLabelPrefix + STROKE_WIDTH_LABELS[Arrays.asList(STROKE_WIDTH_VALUES).indexOf(mStrokeWidth)]);
                 ((TextView) view).setText(strokeWidthLabelPrefix + mStrokeWidth);
@@ -413,7 +460,10 @@ public class TouchDrawActivity extends Activity {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
-        spinner.setBackgroundColor(Color.parseColor((toolbarBgColor != null) ? toolbarBgColor : "#FFFFFF";)));
+        if (toolbarBgColor == null) {
+            toolbarBgColor = "#FFFFFF";
+        }
+        spinner.setBackgroundColor(Color.parseColor(toolbarBgColor));
         spinner.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
 
