@@ -531,7 +531,8 @@ public class TouchDrawActivity extends Activity {
 
     public Bitmap scaleBitmap(Bitmap bitmap) {
         if (bitmap == null) {
-                return bitmap;
+            cancelDrawing();
+            return bitmap;
         }
         int origWidth = bitmap.getWidth();
         int origHeight = bitmap.getHeight();
@@ -555,6 +556,7 @@ public class TouchDrawActivity extends Activity {
 
     public void finishDrawing() {
         if (mBitmap == null) {
+            cancelDrawing();
             return;
         }
         ByteArrayOutputStream drawing = new ByteArrayOutputStream();
@@ -566,10 +568,7 @@ public class TouchDrawActivity extends Activity {
     }
 
     @Override
-    public void finish() {
-        if (mBitmap == null) {
-            return;
-        }
+    public void finish() {        
         if (mBitmap != null) {
             mBitmap.recycle();
             mBitmap = null;
@@ -644,6 +643,7 @@ public class TouchDrawActivity extends Activity {
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             //07-10-2021. EI: added code below to prevent OS Crash due to null object
             if (mBitmap == null) {
+                cancelDrawing();
                 return;
             }
             super.onSizeChanged(w, h, oldw, oldh);                     
@@ -676,6 +676,7 @@ public class TouchDrawActivity extends Activity {
         @Override
         protected void onDraw(Canvas canvas) {
             if (mBitmap == null) {
+                cancelDrawing();
                 return;
             }
             canvas.drawColor(Color.argb(a, r, g, b));
