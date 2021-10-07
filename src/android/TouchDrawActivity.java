@@ -395,7 +395,7 @@ public class TouchDrawActivity extends Activity {
         spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                //mStrokeWidth = STROKE_WIDTH_VALUES[position];
+                mStrokeWidth = STROKE_WIDTH_VALUES[position];
 
                 ((TextView) view).setBackgroundColor(Color.parseColor(toolbarBgColor));
                 ((TextView) view).setTextColor(Color.parseColor(toolbarTextColor));
