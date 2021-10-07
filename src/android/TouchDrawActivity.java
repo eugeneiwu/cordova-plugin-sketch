@@ -422,7 +422,8 @@ public class TouchDrawActivity extends Activity {
 
         //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 0.30);
         spinner.setLayoutParams(layoutParams);
-        spinner.setSelection(Arrays.asList(STROKE_WIDTH_LABELS).indexOf("1x"));
+        //spinner.setSelection(Arrays.asList(STROKE_WIDTH_LABELS).indexOf("1x"));
+        spinner.setSelection(Arrays.asList(STROKE_WIDTH_LABELS).indexOf(mStrokeWidth + "x"));
 
         return spinner;
     }
