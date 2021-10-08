@@ -718,6 +718,7 @@ public class TouchDrawActivity extends Activity {
         protected void onDraw(Canvas canvas) {
             if (mBitmap == null) {                
                 LOG.e("APP", "Method: onDraw => mBitmap is null");
+                return;
             }
             canvas.drawColor(Color.argb(a, r, g, b));
             canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
