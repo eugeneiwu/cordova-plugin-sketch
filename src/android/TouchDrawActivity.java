@@ -125,13 +125,15 @@ public class TouchDrawActivity extends Activity {
             toolbarTextColor = intentExtras.getString("toolbarTextColor");
 
             String tmpTextValues = intentExtras.getString("textValues");
-            LOG.e("APP", "=> " + tmpTextValues);
+            LOG.e("APP", "Options textValues => " + tmpTextValues);
+            LOG.e("APP", "Options toolbarBgColor => " + toolbarBgColor);
+            LOG.e("APP", "Options toolbarTextColor => " + toolbarTextColor);
 
             if(tmpTextValues != null) {
                 try {
                     textValues = new JSONObject(tmpTextValues);
                 } catch(JSONException e) {
-                    LOG.e("APP", "ERROR PARSING => " + tmpTextValues);
+                    LOG.e("APP", "ERROR PARSING Options textValues => " + tmpTextValues);
                 }
 
                 try {
@@ -221,6 +223,10 @@ public class TouchDrawActivity extends Activity {
         if (toolbarTextColor == null) {
                 toolbarTextColor = "#000000";
         }
+        
+        LOG.e("APP", "toolbarBgColor set to => " + toolbarBgColor);
+        LOG.e("APP", "toolbarTextColor set to => " + toolbarTextColor);
+        
         cancelButton.setBackgroundColor(Color.parseColor(toolbarBgColor));
         cancelButton.setTextColor(Color.parseColor(toolbarTextColor));
         cancelButton.setLayoutParams(new LinearLayout.LayoutParams(
@@ -243,6 +249,10 @@ public class TouchDrawActivity extends Activity {
         if (toolbarTextColor == null) {
                 toolbarTextColor = "#000000";
         }
+        
+        LOG.e("APP", "toolbarBgColor set to => " + toolbarBgColor);
+        LOG.e("APP", "toolbarTextColor set to => " + toolbarTextColor);
+        
         eraseButton.setBackgroundColor(Color.parseColor(toolbarBgColor));
         eraseButton.setTextColor(Color.parseColor(toolbarTextColor));
         eraseButton.setLayoutParams(new LinearLayout.LayoutParams(
@@ -274,6 +284,10 @@ public class TouchDrawActivity extends Activity {
         if (toolbarTextColor == null) {
                 toolbarTextColor = "#000000";
         }
+        
+        LOG.e("APP", "toolbarBgColor set to => " + toolbarBgColor);
+        LOG.e("APP", "toolbarTextColor set to => " + toolbarTextColor);
+        
         doneButton.setBackgroundColor(Color.parseColor(toolbarBgColor));
         doneButton.setTextColor(Color.parseColor(toolbarTextColor));
         doneButton.setLayoutParams(new LinearLayout.LayoutParams(
@@ -314,6 +328,9 @@ public class TouchDrawActivity extends Activity {
                 if (toolbarTextColor == null) {
                     toolbarTextColor = "#000000";
                 }
+                
+                LOG.e("APP", "toolbarBgColor set to => " + toolbarBgColor);
+                LOG.e("APP", "toolbarTextColor set to => " + toolbarTextColor);
 
                 v.setBackgroundColor(Color.parseColor(toolbarBgColor));
                 v.setTextColor(Color.parseColor(toolbarTextColor));
@@ -363,6 +380,10 @@ public class TouchDrawActivity extends Activity {
                     if (toolbarTextColor == null) {
                         toolbarTextColor = "#000000";
                     }
+                    
+                    LOG.e("APP", "toolbarBgColor set to => " + toolbarBgColor);
+                    LOG.e("APP", "toolbarTextColor set to => " + toolbarTextColor);
+                    
                     ((TextView) view).setBackgroundColor(Color.parseColor(toolbarBgColor));
                     ((TextView) view).setTextColor(Color.parseColor(toolbarTextColor));
                     ((TextView) view).setTypeface(Typeface.SANS_SERIF);
@@ -412,6 +433,10 @@ public class TouchDrawActivity extends Activity {
                 if (toolbarTextColor == null) {
                     toolbarTextColor = "#000000";
                 }
+                
+                LOG.e("APP", "toolbarBgColor set to => " + toolbarBgColor);
+                LOG.e("APP", "toolbarTextColor set to => " + toolbarTextColor);
+                
                 v.setBackgroundColor(Color.parseColor(toolbarBgColor));
                 v.setTextColor(Color.parseColor(toolbarTextColor));
                 v.setTypeface(Typeface.SANS_SERIF);
@@ -443,6 +468,9 @@ public class TouchDrawActivity extends Activity {
                 if (toolbarTextColor == null) {
                     toolbarTextColor = "#000000";
                 }
+                
+                LOG.e("APP", "toolbarBgColor set to => " + toolbarBgColor);
+                LOG.e("APP", "toolbarTextColor set to => " + toolbarTextColor);
 
                 ((TextView) view).setBackgroundColor(Color.parseColor(toolbarBgColor));
                 ((TextView) view).setTextColor(Color.parseColor(toolbarTextColor));
@@ -463,6 +491,10 @@ public class TouchDrawActivity extends Activity {
         if (toolbarBgColor == null) {
             toolbarBgColor = "#FFFFFF";
         }
+        
+        LOG.e("APP", "toolbarBgColor set to => " + toolbarBgColor);
+        LOG.e("APP", "toolbarTextColor set to => " + toolbarTextColor);
+        
         spinner.setBackgroundColor(Color.parseColor(toolbarBgColor));
         spinner.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
@@ -531,8 +563,10 @@ public class TouchDrawActivity extends Activity {
 
     public Bitmap scaleBitmap(Bitmap bitmap) {
         if (bitmap == null) {            
+            LOG.e("APP", "Method: scaleBitmap => bitmap is null ");
             return bitmap;
-        }
+        }        
+        
         int origWidth = bitmap.getWidth();
         int origHeight = bitmap.getHeight();
         int newWidth, newHeight;
@@ -554,20 +588,26 @@ public class TouchDrawActivity extends Activity {
     }
 
     public void finishDrawing() {        
+       
+        if (mBitmap == null) {            
+            LOG.e("APP", "Method: finishDrawing => mBitmap is null ");
+        }  
+        
+        ByteArrayOutputStream drawing = new ByteArrayOutputStream();
+        scaleBitmap(mBitmap).compress(mEncodingType, 100, drawing);
         Intent drawingResult = new Intent();
-        
-        if (mBitmap != null) {
-            ByteArrayOutputStream drawing = new ByteArrayOutputStream();
-            scaleBitmap(mBitmap).compress(mEncodingType, 100, drawing);        
-            drawingResult.putExtra(DRAWING_RESULT_PARCELABLE, drawing.toByteArray());
-        }
-        
+        drawingResult.putExtra(DRAWING_RESULT_PARCELABLE, drawing.toByteArray());        
         setResult(Activity.RESULT_OK, drawingResult);
         finish();
     }
 
     @Override
-    public void finish() {        
+    public void finish() {  
+        
+        if (mBitmap == null) {            
+            LOG.e("APP", "Method: finish => mBitmap is null ");
+        }   
+        
         if (mBitmap != null) {
             mBitmap.recycle();
             mBitmap = null;
@@ -619,7 +659,8 @@ public class TouchDrawActivity extends Activity {
                     if (mBackgroundImageType == BackgroundImageType.FILE_URL) {
                             mBitmap = loadMutableBitmapFromFileURI(new URI(mBackgroundImageUrl));
 
-                            if (mBitmap == null) {
+                            if (mBitmap == null) {                                           
+                                LOG.e("APP", "Method: TouchDrawView => mBitmap is null ");           
                                 throw new IOException("Failed to read file: " + mBackgroundImageUrl);
                             }
                     } else if (mBackgroundImageType == BackgroundImageType.DATA_URL) {
@@ -642,8 +683,9 @@ public class TouchDrawActivity extends Activity {
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             //07-10-2021. EI: added code below to prevent OS Crash due to null object
             if (mBitmap == null) {                
-                return;
+                LOG.e("APP", "Method: onSizeChanged => mBitmap is null");
             }
+            
             super.onSizeChanged(w, h, oldw, oldh);                     
 
             float newWidth = w;
@@ -674,7 +716,7 @@ public class TouchDrawActivity extends Activity {
         @Override
         protected void onDraw(Canvas canvas) {
             if (mBitmap == null) {                
-                return;
+                LOG.e("APP", "Method: onDraw => mBitmap is null");
             }
             canvas.drawColor(Color.argb(a, r, g, b));
             canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
