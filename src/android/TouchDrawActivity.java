@@ -684,6 +684,7 @@ public class TouchDrawActivity extends Activity {
             //07-10-2021. EI: added code below to prevent OS Crash due to null object
             if (mBitmap == null) {                
                 LOG.e("APP", "Method: onSizeChanged => mBitmap is null");
+                return;
             }
             
             super.onSizeChanged(w, h, oldw, oldh);                     
