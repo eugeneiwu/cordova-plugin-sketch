@@ -553,15 +553,15 @@ public class TouchDrawActivity extends Activity {
         super.onBackPressed();
     }
 
-    public void finishDrawing() {
-        if (mBitmap == null) {
-            cancelDrawing();
-            return;
-        }
-        ByteArrayOutputStream drawing = new ByteArrayOutputStream();
-        scaleBitmap(mBitmap).compress(mEncodingType, 100, drawing);
+    public void finishDrawing() {        
         Intent drawingResult = new Intent();
-        drawingResult.putExtra(DRAWING_RESULT_PARCELABLE, drawing.toByteArray());
+        
+        if (mBitmap != null) {
+            ByteArrayOutputStream drawing = new ByteArrayOutputStream();
+            scaleBitmap(mBitmap).compress(mEncodingType, 100, drawing);        
+            drawingResult.putExtra(DRAWING_RESULT_PARCELABLE, drawing.toByteArray());
+        }
+        
         setResult(Activity.RESULT_OK, drawingResult);
         finish();
     }
